@@ -3,36 +3,7 @@ import { _ } from "svelte-i18n";
 import { get } from "svelte/store";
 import { colors, period } from "./Constants";
 import { activeSession, mutex, sessions } from "./Stores";
-
-export class Mutex {
-  private locked: boolean = false;
-  private i: number = 0;
-
-  async lock() {
-    this.i++;
-    if (this.locked) {
-      await new Promise<void>(resolve => {
-        const interval = setInterval(() => {
-          if (!this.locked) {
-            clearInterval(interval);
-            resolve();
-          }
-        }, 100 + this.i);
-      });
-    }
-    this.locked = true;
-  }
-
-  unlock() {
-    this.locked = false;
-  }
-
-  async wrap(fn: Function) {
-    await this.lock();
-    await fn();
-    this.unlock();
-  }
-}
+import Mutex from "./Mutex";
 
 export const loadSavedSessions = (): Session[] => {
   const json = localStorage.getItem("sessions");

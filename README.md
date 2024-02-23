@@ -5,6 +5,18 @@
 ## Download
 You can download the latest version [here](https://github.com/dvorak321/gbfr-parser/releases).
 
+## Usage
+
+Pre-requirements
+- Python 3.11.2 or newer - [Download here](https://www.python.org/downloads/release/python-3112/)
+  - Make sure to check the options `Use admin privileges when installing py.exe` and `Add python.exe to PATH` during the installation.
+
+
+How to use
+1. Run `uac_start.cmd` as Administrator
+2. Open your game
+3. Open `index.html` in your browser (Preferably chrome)
+
 ## Building this project
 
 Pre-requirements

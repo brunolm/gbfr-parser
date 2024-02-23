@@ -129,7 +129,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each session.actors as actor, idx}
+      {#each session.actors as actor}
         {#if actor.party_idx >= 0}
           <tr>
             <td>{actor.party_idx + 1}</td>

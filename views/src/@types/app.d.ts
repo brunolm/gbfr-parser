@@ -3,6 +3,7 @@ import { Mutex } from "../lib/Utils";
 declare global {
   interface Message {
     type: "enter_area" | "damage";
+    time_ms: number;
     data: EventData;
   }
 
@@ -55,11 +56,13 @@ declare global {
     chart: ChartData;
 
     start_at: number;
-    last_at: number;
+    start_damage_at: number;
+    last_damage_at: number;
     total_dmg: number;
     total_dps?: number;
     events?: EventRecord[];
     actors?: ActorRecord[];
+    last_chart_update?: number;
   }
 
   interface DataSet {

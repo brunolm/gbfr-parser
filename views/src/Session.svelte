@@ -83,7 +83,7 @@
 
   const updateEvents = () => {
     if (!session.mutex) return;
-    if (session?.last_at > 0) {
+    if (session?.last_damage_at > 0) {
       pruneEvents(session);
       calculateDps(session, chart);
     }

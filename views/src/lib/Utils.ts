@@ -2,14 +2,22 @@ import type { Chart } from "chart.js";
 import { _ } from "svelte-i18n";
 import { get } from "svelte/store";
 import { colors, period } from "./Constants";
-import { activeSession, mutex, sessions } from "./Stores";
 import Mutex from "./Mutex";
+import { activeSession, mutex, sessions } from "./Stores";
 
 export const loadSavedSessions = (): Session[] => {
   const json = localStorage.getItem("sessions");
   if (!json) return [];
 
-  return JSON.parse(json);
+  const data: Session[] = JSON.parse(json);
+  data.forEach(session => {
+    if ((session as any).last_at) {
+      session.start_damage_at = session.start_at;
+      session.last_damage_at = (session as any).last_at;
+    }
+  });
+
+  return data;
 };
 
 export const saveSessions = () => {
@@ -17,13 +25,13 @@ export const saveSessions = () => {
   clones = clones.filter(session => {
     delete session.mutex;
     session.done = true;
-    return session.total_dmg > 0 && session.last_at > 0;
+    return session.total_dmg > 0;
   });
 
   localStorage.setItem("sessions", JSON.stringify(clones));
 };
 
-export const createSession = () => {
+export const createSession = (time: number) => {
   const $sessions = get(sessions);
   if ($sessions.length) {
     const session = $sessions[$sessions.length - 1];
@@ -38,8 +46,9 @@ export const createSession = () => {
     mutex: new Mutex(),
     chart: { datasets: [] },
 
-    start_at: +new Date(),
-    last_at: 0,
+    start_at: time,
+    start_damage_at: 0,
+    last_damage_at: 0,
     total_dmg: 0
   };
   sessions.update(v => {
@@ -130,8 +139,6 @@ export const pruneEvents = (session: Session) => {
   });
 };
 
-let last_at = 0;
-
 export const calculateDps = (session: Session, chart?: Chart) => {
   if (!session.mutex) return;
 
@@ -142,8 +149,8 @@ export const calculateDps = (session: Session, chart?: Chart) => {
         return;
       }
 
-      const full = (session.last_at - session.start_at) / 1000;
-      const real = (+new Date() - session.start_at) / 1000;
+      const full = (session.last_damage_at - session.start_damage_at) / 1000;
+      const real = Math.round((+new Date() - session.start_damage_at) / 1000);
       const fullm = Math.min(60, real);
 
       for (const actor of session.actors) {
@@ -151,7 +158,7 @@ export const calculateDps = (session: Session, chart?: Chart) => {
         actor.dpsm = Math.floor(actor.dmgm / fullm);
       }
 
-      if (real > 0 && last_at !== session.last_at) {
+      if (real > 0 && session.last_chart_update !== session.last_damage_at) {
         if (period > 0) {
           const min_time = real - period;
           for (const dataset of session.chart.datasets) {
@@ -179,7 +186,7 @@ export const calculateDps = (session: Session, chart?: Chart) => {
         });
 
         chart?.update();
-        last_at = session.last_at;
+        session.last_chart_update = session.last_damage_at;
       }
 
       session.total_dps = session.actors.map(actor => actor.dps).reduce((sum, n) => (sum || 0) + (n || 0));
@@ -188,19 +195,24 @@ export const calculateDps = (session: Session, chart?: Chart) => {
   });
 };
 
+export const formatDuration = (start: number, end: number) => {
+  const ms = end - start;
+  let result;
+  if (ms < 1000) {
+    result = `${ms}ms`;
+  } else {
+    const sec = Math.floor(ms / 1000);
+    if (sec < 60) result = `${sec}s`;
+    else result = `${Math.floor(sec / 60)}m`;
+  }
+  return result;
+};
+
 export const formatTime = (start: number, end: number) => {
   const t = new Date(start);
   let result = `${t.getHours()}:${t.getMinutes()}`;
-
-  const ms = end - start;
-  if (ms > 0) {
-    if (ms < 1000) {
-      result += ` [${ms}ms]`;
-    } else {
-      const sec = Math.floor(ms / 1000);
-      if (sec < 60) result += ` [${sec}s]`;
-      else result += ` [${Math.floor(sec / 60)}m]`;
-    }
+  if (end - start > 0) {
+    result += ` [${formatDuration(start, end)}]`;
   }
   return result;
 };

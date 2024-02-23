@@ -33,19 +33,25 @@
   let nextBtn: HTMLElement;
   let swiper: Swiper;
 
-  const onDamage = (data: EventData) => {
+  const onDamage = (data: EventData, time: number) => {
     mutex.wrap(async () => {
       if (data.source[3] === -1 || data.damage <= 0) return;
 
       let session = $sessions[$sessions.length - 1];
       if (!session || session.done) {
-        session = createSession();
+        session = createSession(time);
         updateActiveSession = true;
       } else if (session.mutex) {
         await session.mutex.wrap(() => {
-          session.last_at = +new Date();
+          session.last_damage_at = time;
         });
       } else return;
+
+      if (session.mutex && !session.start_damage_at) {
+        await session.mutex.wrap(() => {
+          session.start_damage_at = time;
+        });
+      }
 
       await session.mutex?.wrap(() => {
         session.total_dmg += data.damage;
@@ -71,7 +77,7 @@
 
         if (!session.events) session.events = [];
         session.events.push({
-          time: session.last_at,
+          time: time,
           dmg: data.damage,
           source: data.source,
           target: data.target
@@ -124,13 +130,16 @@
         }
 
         const msg: Message = JSON.parse(ev.data);
+        if (!msg.time_ms) {
+          msg.time_ms = +new Date();
+        }
         switch (msg.type) {
           case "enter_area":
-            createSession();
+            createSession(msg.time_ms);
             updateActiveSession = true;
             break;
           case "damage":
-            onDamage(msg.data);
+            onDamage(msg.data, msg.time_ms);
             break;
         }
       });
@@ -166,7 +175,7 @@
                     type="button"
                     on:click|self={() => ($activeSession = session)}
                   >
-                    {formatTime(session.start_at, session.last_at)}
+                    {formatTime(session.start_damage_at, session.last_damage_at)}
                     <!-- svelte-ignore a11y-no-static-element-interactions -->
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <span

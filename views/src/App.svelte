@@ -134,7 +134,7 @@
                   }
                 }}
               >
-                <Close size="1.8rem" />
+                <Close size="1.6rem" />
               </span>
             </button>
           {/if}

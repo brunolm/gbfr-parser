@@ -8,7 +8,15 @@
 <script lang="ts">
   import Session from "./Session.svelte";
   import { activeSession, mutex, sessions } from "./lib/Stores";
-  import { createSession, formatTime, getAction, getActor, getTarget } from "./lib/Utils";
+  import {
+    createSession,
+    formatTime,
+    getAction,
+    getActor,
+    getTarget,
+    loadSavedSessions,
+    saveSessions
+  } from "./lib/Utils";
 
   let ws: WebSocket;
   let updateSessionIdx = false;
@@ -22,13 +30,13 @@
       if (!session || session.done) {
         session = createSession();
         updateSessionIdx = true;
-      } else {
+      } else if (session.mutex) {
         await session.mutex.wrap(() => {
           session.last_at = +new Date();
         });
-      }
+      } else return;
 
-      await session.mutex.wrap(() => {
+      await session.mutex?.wrap(() => {
         session.total_dmg += data.damage;
 
         const actor = getActor(data.source);
@@ -64,10 +72,18 @@
         updateSessionIdx = false;
         $activeSession = session;
       }
+
+      saveSessions();
     });
   };
 
   onMount(() => {
+    const savedSessions = loadSavedSessions();
+    if (savedSessions) {
+      $sessions = savedSessions;
+      $activeSession = $sessions[$sessions.length - 1];
+    }
+
     const init = () => {
       ws = new WebSocket("ws://localhost:24399");
       ws.addEventListener("message", ev => {

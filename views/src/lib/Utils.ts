@@ -34,6 +34,23 @@ export class Mutex {
   }
 }
 
+export const loadSavedSessions = (): Session[] => {
+  const json = localStorage.getItem("sessions");
+  if (!json) return [];
+
+  return JSON.parse(json);
+};
+
+export const saveSessions = () => {
+  const clones: Session[] = JSON.parse(JSON.stringify(get(sessions)));
+  clones.forEach(clone => {
+    delete clone.mutex;
+    clone.done = true;
+  });
+
+  localStorage.setItem("sessions", JSON.stringify(clones));
+};
+
 export const createSession = () => {
   const $sessions = get(sessions);
   if ($sessions.length) {
@@ -109,8 +126,10 @@ export const getAction = (actor: ActorRecord, idx: number) => {
 };
 
 export const pruneEvents = (session: Session) => {
+  if (!session.mutex) return;
+
   mutex.wrap(() => {
-    session.mutex.wrap(() => {
+    session.mutex?.wrap(() => {
       if (!session?.events?.length) return;
 
       const min_time = +new Date() - 60000;
@@ -130,9 +149,11 @@ export const pruneEvents = (session: Session) => {
 let last_at = 0;
 
 export const calculateDps = (session: Session, chart?: Chart) => {
+  if (!session.mutex) return;
+
   const $_ = get(_);
   mutex.wrap(() => {
-    session.mutex.wrap(() => {
+    session.mutex?.wrap(() => {
       if (!session?.events?.length || !session.actors) {
         return;
       }

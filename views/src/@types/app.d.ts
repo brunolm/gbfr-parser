@@ -50,9 +50,9 @@ declare global {
   }
 
   interface Session {
-    mutex: Mutex;
-    chart: ChartData;
+    mutex?: Mutex;
     done?: boolean;
+    chart: ChartData;
 
     start_at: number;
     last_at: number;

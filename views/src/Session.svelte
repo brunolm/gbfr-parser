@@ -21,7 +21,7 @@
   import Breakdown from "./Breakdown.svelte";
   import { colors } from "./lib/Constants";
   import { sessions } from "./lib/Stores";
-  import { calculateDps, pruneEvents } from "./lib/Utils";
+  import { calculateDps, pruneEvents, saveSessions } from "./lib/Utils";
 
   export let session: Session;
 
@@ -82,9 +82,11 @@
   }
 
   const updateEvents = () => {
+    if (!session.mutex) return;
     if (session?.last_at > 0) {
       pruneEvents(session);
       calculateDps(session, chart);
+      saveSessions();
     }
 
     if (!destroyed && $sessions.indexOf(session) >= 0) {

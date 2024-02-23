@@ -1,5 +1,10 @@
 <script lang="ts" context="module">
-  import { onMount } from "svelte";
+  import { afterUpdate, onMount } from "svelte";
+  import Swiper from "swiper";
+  import { Navigation } from "swiper/modules";
+
+  import ChevronLeft from "svelte-material-icons/ChevronLeft.svelte";
+  import ChevronRight from "svelte-material-icons/ChevronRight.svelte";
   import Close from "svelte-material-icons/Close.svelte";
 
   const debug = false;
@@ -15,12 +20,18 @@
     getActor,
     getTarget,
     loadSavedSessions,
+    removeSession,
     saveSessions
   } from "./lib/Utils";
 
   let ws: WebSocket;
-  let updateSessionIdx = false;
+  let updateActiveSession = false;
   let connected = false;
+
+  let swiperRoot: HTMLElement;
+  let prevBtn: HTMLElement;
+  let nextBtn: HTMLElement;
+  let swiper: Swiper;
 
   const onDamage = (data: EventData) => {
     mutex.wrap(async () => {
@@ -29,7 +40,7 @@
       let session = $sessions[$sessions.length - 1];
       if (!session || session.done) {
         session = createSession();
-        updateSessionIdx = true;
+        updateActiveSession = true;
       } else if (session.mutex) {
         await session.mutex.wrap(() => {
           session.last_at = +new Date();
@@ -68,14 +79,35 @@
       });
 
       sessions.set($sessions);
-      if (updateSessionIdx) {
-        updateSessionIdx = false;
+      if (updateActiveSession) {
+        updateActiveSession = false;
         $activeSession = session;
+
+        if (swiper) {
+          window.requestAnimationFrame(() => swiper.update());
+          window.requestAnimationFrame(() => swiper.slideTo($sessions.length - 1));
+        }
       }
 
       saveSessions();
     });
   };
+
+  afterUpdate(() => {
+    if (swiperRoot && !swiper) {
+      swiper = new Swiper(swiperRoot, {
+        slidesPerView: "auto",
+        centeredSlides: false,
+        allowTouchMove: false,
+        freeMode: true,
+        navigation: {
+          nextEl: ".slider-next",
+          prevEl: ".slider-prev"
+        },
+        modules: [Navigation]
+      });
+    }
+  });
 
   onMount(() => {
     const savedSessions = loadSavedSessions();
@@ -95,7 +127,7 @@
         switch (msg.type) {
           case "enter_area":
             createSession();
-            updateSessionIdx = true;
+            updateActiveSession = true;
             break;
           case "damage":
             onDamage(msg.data);
@@ -115,30 +147,46 @@
   {#if $sessions.some(session => session.total_dmg > 0)}
     <div id="main">
       <header>
-        {#each $sessions as session, idx}
-          {#if session.total_dmg > 0}
-            <button
-              class={$activeSession === session ? "active" : undefined}
-              type="button"
-              on:click|self={() => ($activeSession = session)}
-            >
-              {formatTime(session.start_at, session.last_at)}
-              <!-- svelte-ignore a11y-no-static-element-interactions -->
-              <!-- svelte-ignore a11y-click-events-have-key-events -->
-              <span
-                on:click={() => {
-                  $sessions.splice(idx, 1);
-                  $sessions = $sessions;
-                  if ($activeSession === session) {
-                    $activeSession = $sessions[$sessions.length - 1];
-                  }
-                }}
-              >
-                <Close size="1.6rem" />
-              </span>
-            </button>
-          {/if}
-        {/each}
+        <button class="slider-prev" bind:this={prevBtn}>
+          <ChevronLeft size="2.1rem" />
+        </button>
+        <div class="slider-wrapper">
+          <div class="swiper" bind:this={swiperRoot}>
+            <div class="swiper-wrapper">
+              {#each $sessions as session, idx}
+                {#if session.total_dmg > 0}
+                  <button
+                    class={`swiper-slide` + ($activeSession === session ? " active" : "")}
+                    type="button"
+                    on:click|self={() => ($activeSession = session)}
+                  >
+                    {formatTime(session.start_at, session.last_at)}
+                    <!-- svelte-ignore a11y-no-static-element-interactions -->
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <span
+                      on:click={() => {
+                        mutex.wrap(() => {
+                          removeSession(session);
+                          if (swiper) {
+                            window.requestAnimationFrame(() => swiper.update());
+                            if ($activeSession === session) {
+                              window.requestAnimationFrame(() => swiper.slideTo($sessions.length - 1));
+                            }
+                          }
+                        });
+                      }}
+                    >
+                      <Close size="1.6rem" />
+                    </span>
+                  </button>
+                {/if}
+              {/each}
+            </div>
+          </div>
+        </div>
+        <button class="slider-next" bind:this={nextBtn}>
+          <ChevronRight size="2.1rem" />
+        </button>
       </header>
       <main>
         {#each $sessions as session (session.start_at)}

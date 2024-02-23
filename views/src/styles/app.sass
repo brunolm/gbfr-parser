@@ -87,31 +87,59 @@ b
   min-width: 40rem
   max-width: 80rem
 
+$header-height: 3.2rem
 header
   background-color: $fg-darken
   position: relative
-  overflow: auto
-  white-space: nowrap
+  display: flex
+  flex-direction: row
+  height: $header-height
+
+.slider-prev,
+.slider-next
+  background-color: $fg
+  border: 0 solid $border
+
+  height: $header-height
+  padding: .5rem 1rem
+
+  &:hover
+    color: $border-green
+
+.slider-prev
+  border-right-width: .1rem
+.slider-next
+  border-left-width: .1rem
+
+.slider-wrapper
+  flex: auto
+  width: 0
+
+  .swiper
+    margin: 0!important
 
   button
-    border: 0 solid transparent
-    border-width: 0 .1rem
+    border: 0 solid $border
     font-weight: 500
 
+    position: relative
+    overflow: hidden
     min-width: 12rem
-    padding: 0.8rem 1rem
-    margin: 0 -0.1rem
+    max-width: 15rem
+    height: $header-height
+    padding: .5rem 1rem
 
     &:not(:last-child)
-      border-left-color: $border
+      border-right-width: .1rem
 
-    svg
-      position: relative
-
+    &:hover
+      color: $text-lighten
     &.active
       background-color: $fg
-      border-color: $border-green
       color: $border-green
+
+    svg:hover
+      color: $border-red
 
 main
   > button

@@ -2,7 +2,7 @@ import type { Chart } from "chart.js";
 import { _ } from "svelte-i18n";
 import { get } from "svelte/store";
 import { colors, period } from "./Constants";
-import { mutex, sessions } from "./Stores";
+import { activeSession, mutex, sessions } from "./Stores";
 
 export class Mutex {
   private locked: boolean = false;
@@ -75,6 +75,18 @@ export const createSession = () => {
     return v;
   });
   return session;
+};
+
+export const removeSession = (session: Session) => {
+  mutex.wrap(() => {
+    sessions.update(v => {
+      v.splice(v.indexOf(session), 1);
+      if (get(activeSession) === session) {
+        activeSession.set(v[v.length - 1]);
+      }
+      return v;
+    });
+  });
 };
 
 export const getActor = (data: ActorData) => {

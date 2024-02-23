@@ -42,10 +42,11 @@ export const loadSavedSessions = (): Session[] => {
 };
 
 export const saveSessions = () => {
-  const clones: Session[] = JSON.parse(JSON.stringify(get(sessions)));
-  clones.forEach(clone => {
-    delete clone.mutex;
-    clone.done = true;
+  let clones: Session[] = JSON.parse(JSON.stringify(get(sessions)));
+  clones = clones.filter(session => {
+    delete session.mutex;
+    session.done = true;
+    return session.total_dmg > 0 && session.last_at > 0;
   });
 
   localStorage.setItem("sessions", JSON.stringify(clones));

@@ -85,7 +85,7 @@
 
         if (swiper) {
           window.requestAnimationFrame(() => swiper.update());
-          window.requestAnimationFrame(() => swiper.slideTo($sessions.length - 1));
+          window.requestAnimationFrame(() => swiper.slideTo($sessions.indexOf($activeSession)));
         }
       }
     });
@@ -104,6 +104,8 @@
         },
         modules: [Navigation]
       });
+
+      window.requestAnimationFrame(() => swiper.slideTo($sessions.indexOf($activeSession)));
     }
   });
 
@@ -169,15 +171,13 @@
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <span
                       on:click={() => {
-                        mutex.wrap(() => {
-                          removeSession(session);
-                          if (swiper) {
-                            window.requestAnimationFrame(() => swiper.update());
-                            if ($activeSession === session) {
-                              window.requestAnimationFrame(() => swiper.slideTo($sessions.length - 1));
-                            }
+                        removeSession(session);
+                        if (swiper) {
+                          window.requestAnimationFrame(() => swiper.update());
+                          if ($activeSession === session) {
+                            window.requestAnimationFrame(() => swiper.slideTo($sessions.indexOf($activeSession)));
                           }
-                        });
+                        }
                       }}
                     >
                       <Close size="1.6rem" />

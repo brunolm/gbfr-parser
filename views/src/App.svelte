@@ -88,8 +88,6 @@
           window.requestAnimationFrame(() => swiper.slideTo($sessions.length - 1));
         }
       }
-
-      saveSessions();
     });
   };
 
@@ -140,6 +138,12 @@
     };
 
     init();
+
+    const save = () => {
+      saveSessions();
+      window.setTimeout(save, 3000);
+    };
+    save();
   });
 </script>
 

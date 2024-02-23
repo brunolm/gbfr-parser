@@ -16,7 +16,7 @@
 
   const onDamage = (data: EventData) => {
     mutex.wrap(async () => {
-      if (data.source[3] === -1 || !data.damage) return;
+      if (data.source[3] === -1 || data.damage <= 0) return;
 
       let session = $sessions[$sessions.length - 1];
       if (!session || session.done) {

@@ -2,7 +2,7 @@ import type { Chart } from "chart.js";
 import { _ } from "svelte-i18n";
 import { get } from "svelte/store";
 import { colors, period } from "./Constants";
-import { sessions } from "./Stores";
+import { mutex, sessions } from "./Stores";
 
 export class Mutex {
   private locked: boolean = false;
@@ -63,11 +63,13 @@ export const createSession = () => {
 export const getActor = (data: ActorData) => {
   const $sessions = get(sessions);
   const record = $sessions[$sessions.length - 1];
-  let actor = record.actors?.find(e => e.player_id === data[1]);
+  let characterId = toHexString(data[2]);
+
+  let actor = record.actors?.find(e => e.player_id === data[1] || (e.party_idx === data[3] && characterId));
   if (!actor) {
     actor = {
       player_id: data[1],
-      character_id: toHexString(data[2]),
+      character_id: characterId,
       party_idx: data[3],
       dmg: 0,
       dmgm: 0,
@@ -107,19 +109,21 @@ export const getAction = (actor: ActorRecord, idx: number) => {
 };
 
 export const pruneEvents = (session: Session) => {
-  session.mutex.wrap(() => {
-    if (!session?.events?.length) return;
+  mutex.wrap(() => {
+    session.mutex.wrap(() => {
+      if (!session?.events?.length) return;
 
-    const min_time = +new Date() - 60000;
-    while (session.events.length > 0) {
-      const event = session.events[0];
-      if (event.time > min_time) break;
-      session.events.shift();
+      const min_time = +new Date() - 60000;
+      while (session.events.length > 0) {
+        const event = session.events[0];
+        if (event.time > min_time) break;
+        session.events.shift();
 
-      const actor = getActor(event.source);
-      actor.dmgm -= event.dmg;
-      sessions.set(get(sessions));
-    }
+        const actor = getActor(event.source);
+        actor.dmgm -= event.dmg;
+        sessions.set(get(sessions));
+      }
+    });
   });
 };
 
@@ -127,53 +131,55 @@ let last_at = 0;
 
 export const calculateDps = (session: Session, chart?: Chart) => {
   const $_ = get(_);
-  session.mutex.wrap(() => {
-    if (!session?.events?.length || !session.actors) {
-      return;
-    }
-
-    const full = (session.last_at - session.start_at) / 1000;
-    const real = (+new Date() - session.start_at) / 1000;
-    const fullm = Math.min(60, real);
-
-    for (const actor of session.actors) {
-      actor.dps = Math.floor(actor.dmg / full);
-      actor.dpsm = Math.floor(actor.dmgm / fullm);
-    }
-
-    if (real > 0 && last_at !== session.last_at) {
-      if (period > 0) {
-        const min_time = real - period;
-        for (const dataset of session.chart.datasets) {
-          const idx = dataset.data.findIndex(d => d.x > min_time);
-          if (idx >= 0) {
-            dataset.data = dataset.data.slice(idx);
-          }
-        }
+  mutex.wrap(() => {
+    session.mutex.wrap(() => {
+      if (!session?.events?.length || !session.actors) {
+        return;
       }
 
-      session.actors.forEach(actor => {
-        const label = `[${actor.party_idx + 1}] ` + $_(`actors.${actor.character_id}`);
-        let dataset: DataSet | undefined = session.chart.datasets.find(ds => ds.label === label);
-        if (!dataset) {
-          dataset = {
-            label,
-            data: [],
-            borderColor: colors[actor.party_idx],
-            backgroundColor: colors[actor.party_idx],
-            fill: false
-          };
-          session.chart.datasets.push(dataset);
+      const full = (session.last_at - session.start_at) / 1000;
+      const real = (+new Date() - session.start_at) / 1000;
+      const fullm = Math.min(60, real);
+
+      for (const actor of session.actors) {
+        actor.dps = Math.floor(actor.dmg / full);
+        actor.dpsm = Math.floor(actor.dmgm / fullm);
+      }
+
+      if (real > 0 && last_at !== session.last_at) {
+        if (period > 0) {
+          const min_time = real - period;
+          for (const dataset of session.chart.datasets) {
+            const idx = dataset.data.findIndex(d => d.x > min_time);
+            if (idx >= 0) {
+              dataset.data = dataset.data.slice(idx);
+            }
+          }
         }
-        dataset.data.push({ x: real, y: actor.dpsm || 0 });
-      });
 
-      chart?.update();
-      last_at = session.last_at;
-    }
+        session.actors.forEach(actor => {
+          const label = `[${actor.party_idx + 1}] ` + $_(`actors.${actor.character_id}`);
+          let dataset: DataSet | undefined = session.chart.datasets.find(ds => ds.label === label);
+          if (!dataset) {
+            dataset = {
+              label,
+              data: [],
+              borderColor: colors[actor.party_idx],
+              backgroundColor: colors[actor.party_idx],
+              fill: false
+            };
+            session.chart.datasets.push(dataset);
+          }
+          dataset.data.push({ x: real, y: actor.dpsm || 0 });
+        });
 
-    session.total_dps = session.actors.map(actor => actor.dps).reduce((sum, n) => (sum || 0) + (n || 0));
-    sessions.set(get(sessions));
+        chart?.update();
+        last_at = session.last_at;
+      }
+
+      session.total_dps = session.actors.map(actor => actor.dps).reduce((sum, n) => (sum || 0) + (n || 0));
+      sessions.set(get(sessions));
+    });
   });
 };
 

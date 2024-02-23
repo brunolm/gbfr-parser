@@ -2,5 +2,5 @@ import { writable } from "svelte/store";
 import { Mutex } from "./Utils";
 
 export const sessions = writable<Session[]>([]);
-export const sessionIdx = writable<number>(0);
+export const activeSession = writable<Session>();
 export const mutex = new Mutex();

@@ -7,7 +7,7 @@
 
 <script lang="ts">
   import Session from "./Session.svelte";
-  import { mutex, sessionIdx, sessions } from "./lib/Stores";
+  import { activeSession, mutex, sessions } from "./lib/Stores";
   import { createSession, formatTime, getAction, getActor, getTarget } from "./lib/Utils";
 
   let ws: WebSocket;
@@ -62,7 +62,7 @@
       sessions.set($sessions);
       if (updateSessionIdx) {
         updateSessionIdx = false;
-        sessionIdx.set($sessions.length - 1);
+        $activeSession = session;
       }
     });
   };
@@ -102,9 +102,9 @@
         {#each $sessions as session, idx}
           {#if session.total_dmg > 0}
             <button
-              class={$sessionIdx === idx ? "active" : undefined}
+              class={$activeSession === session ? "active" : undefined}
               type="button"
-              on:click={() => ($sessionIdx = idx)}
+              on:click|self={() => ($activeSession = session)}
             >
               {formatTime(session.start_at, session.last_at)}
               <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -113,8 +113,8 @@
                 on:click={() => {
                   $sessions.splice(idx, 1);
                   $sessions = $sessions;
-                  if ($sessionIdx === idx) {
-                    $sessionIdx = Math.max(0, idx - 1);
+                  if ($activeSession === session) {
+                    $activeSession = $sessions[$sessions.length - 1];
                   }
                 }}
               >
@@ -125,8 +125,8 @@
         {/each}
       </header>
       <main>
-        {#each $sessions as session, idx (session.start_at)}
-          {#if idx === $sessionIdx}
+        {#each $sessions as session (session.start_at)}
+          {#if $activeSession === session}
             {#key session.start_at}
               <Session bind:session />
             {/key}

@@ -5,23 +5,10 @@
 ## Download
 You can download the latest version [here](https://github.com/dvorak321/gbfr-parser/releases).
 
-## Building this project
-
-Pre-requirements
-- Node.js - [Download here](https://nodejs.org/en/download)
-- Yarn - [Installation instructions](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable)
-- Python 3.11 or above - [Download here](https://www.python.org/downloads/windows/)
-
-You can build the views by running the following command:
-```sh
-git clone https://github.com/dvorak321/gbfr-parser # optional
-cd gbfr-parser/views
-yarn install && yarn build
-```
-
-The output should be inside the `gbfr-parser/views/build` directory.
-
 ## Running / Testing
+
+Pre-requirements:
+- Python 3.11 or above - [Download here](https://www.python.org/downloads/windows/)
 
 After obtaining latest [release](https://github.com/dvorak321/gbfr-parser/releases), follow the instruction below
 
@@ -35,3 +22,18 @@ After obtaining latest [release](https://github.com/dvorak321/gbfr-parser/releas
     - Copy [`./steam_win_start.cmd](./steam_win_start.cmd) to your release folder, example [picture](./img/ex1.png)
     - Set Steam launch option as follows `"C:\<Path-To-GBFR-Parser-Release>\gbfr-parser\<Release-Folder-Name>\steam_win_start.cmd" %command%`, example [picture](./img/ex2.png)
     - Launch GBFR from steam and it will automatically launch everything.
+   
+## Building this project
+
+Pre-requirements
+- Node.js - [Download here](https://nodejs.org/en/download)
+- Yarn - [Installation instructions](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable)
+
+You can build the views by running the following command:
+```sh
+git clone https://github.com/dvorak321/gbfr-parser # optional
+cd gbfr-parser/views
+yarn install && yarn build
+```
+
+The output should be inside the `gbfr-parser/views/build` directory.

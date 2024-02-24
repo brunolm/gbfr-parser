@@ -775,5 +775,4 @@ if __name__ == '__main__':
         main()
     except:
         traceback.print_exc()
-    finally:
         os.system('pause')

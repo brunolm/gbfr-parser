@@ -9,11 +9,11 @@ You can download the latest version [here](https://github.com/dvorak321/gbfr-par
 
 Pre-requirements:
 - Python 3.11 or above - [Download here](https://www.python.org/downloads/windows/)
+  - Make sure to enable "Use admin privileges when installing py.exe" and "Add python.exe to PATH" during the installation.
 
 After obtaining latest [release](https://github.com/dvorak321/gbfr-parser/releases), follow the instruction below
 
 2 Approaches:
-
 1. Separate GBFR / ACT launch
     - Launch [`./uac_start.cmd`](./uac_start.cmd)
     - Launch GBFR separately

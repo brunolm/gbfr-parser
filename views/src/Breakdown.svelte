@@ -141,7 +141,7 @@
       {#each actor.targets || [] as target}
         <tr>
           <td>{getTargetName(target.character_id)}</td>
-          <td>{target.dmg}</td>
+          <td>{target.dmg.toLocaleString()}</td>
         </tr>
       {/each}
     {/if}

@@ -111,7 +111,7 @@
   </tbody>
 </table>
 
-<hr />
+<br />
 
 <table>
   <thead>

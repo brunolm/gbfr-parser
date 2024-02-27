@@ -7,6 +7,7 @@
   import ChevronUp from "svelte-material-icons/ChevronUp.svelte";
   import SortAscending from "svelte-material-icons/SortAscending.svelte";
   import SortDescending from "svelte-material-icons/SortDescending.svelte";
+  import { get } from "svelte/store";
 
   const headers: { key?: keyof ActorRecord; text: string }[] = [
     { key: "party_idx", text: "#" },
@@ -95,9 +96,41 @@
 
   onMount(updateEvents);
   onDestroy(() => (destroyed = true));
+
+  const getTargetName = (characterId: string) => {
+    const $_ = get(_);
+
+    if (characterId === "26a4848a") {
+      characterId = "9498420d";
+    }
+
+    let v = $_(`actors.${characterId}`);
+    return v ?? characterId;
+  };
+
+  let maxDmgCharacterId: any;
+  $: {
+    let dmgSums: any = {};
+
+    for (let actor of session.actors!) {
+      for (let target of actor.targets!) {
+        if (!dmgSums[target.character_id]) {
+          dmgSums[target.character_id] = 0;
+        }
+        dmgSums[target.character_id] += target.dmg;
+      }
+    }
+
+    maxDmgCharacterId = Object.keys(dmgSums).reduce((a, b) => (dmgSums[a] > dmgSums[b] ? a : b));
+  }
 </script>
 
 {#if session.actors && session.total_dmg > 0}
+  <div style="text-align: center; padding: 1em;">
+    <h2>
+      {getTargetName(maxDmgCharacterId)}
+    </h2>
+  </div>
   <table>
     <colgroup>
       <col width="50" />

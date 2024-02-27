@@ -31,7 +31,7 @@
   let chart: Chart | undefined;
   let canvas: HTMLCanvasElement;
 
-  let showCanvas = false;
+  let showCanvas = true;
   let destroyed = false;
   let partyIdx = -1;
 

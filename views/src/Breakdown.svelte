@@ -12,6 +12,11 @@
     { key: "min", text: "Min. DMG" },
     { key: "max", text: "Max. DMG" }
   ];
+
+  const headersTarget: { key?: any; text: string }[] = [
+    { key: "target", text: "Target" },
+    { key: "dmg", text: "Damage" }
+  ];
 </script>
 
 <script lang="ts">
@@ -19,6 +24,8 @@
 
   let sortBy: keyof ActionRecord = "dmg";
   let descending = true;
+  let sortByTarget = "dmg";
+  let descendingTarget = true;
 
   $: {
     actor.actions = actor.actions?.sort((a, b) => {
@@ -26,6 +33,15 @@
         return Number(a[sortBy]) > Number(b[sortBy]) ? -1 : 1;
       }
       return Number(a[sortBy]) < Number(b[sortBy]) ? -1 : 1;
+    });
+  }
+
+  $: {
+    actor.targets = (actor.targets as any)?.sort((a: any, b: any) => {
+      if (descendingTarget) {
+        return Number(a[sortByTarget]) > Number(b[sortByTarget]) ? -1 : 1;
+      }
+      return Number(a[sortByTarget]) < Number(b[sortByTarget]) ? -1 : 1;
     });
   }
 
@@ -41,6 +57,17 @@
       v = $_(`actions.${characterId}.${actionId}`);
     }
     return v.startsWith("actions.") ? actionId : v;
+  };
+
+  const getTargetName = (characterId: string) => {
+    const $_ = get(_);
+
+    if (characterId === "26a4848a") {
+      characterId = "9498420d";
+    }
+
+    let v = $_(`actors.${characterId}`);
+    return v ?? characterId;
   };
 </script>
 
@@ -78,6 +105,43 @@
           <td>{action.dmg.toLocaleString()}</td>
           <td>{action.min.toLocaleString()}</td>
           <td>{action.max.toLocaleString()}</td>
+        </tr>
+      {/each}
+    {/if}
+  </tbody>
+</table>
+
+<hr />
+
+<table>
+  <thead>
+    <tr>
+      {#each headersTarget as header}
+        <th
+          scope="col"
+          class={header.key ? "sortable" : undefined}
+          data-active={sortByTarget === header.key || undefined}
+          on:click={header.key
+            ? () => {
+                if (header.key) sortByTarget = header.key;
+                descending = !descending;
+              }
+            : undefined}
+        >
+          {#if sortByTarget === header.key}
+            <svelte:component this={descending ? SortDescending : SortAscending} size="2.1rem" />
+          {/if}
+          {header.text}
+        </th>
+      {/each}
+    </tr>
+  </thead>
+  <tbody>
+    {#if actor.targets?.length}
+      {#each actor.targets || [] as target}
+        <tr>
+          <td>{getTargetName(target.character_id)}</td>
+          <td>{target.dmg}</td>
         </tr>
       {/each}
     {/if}

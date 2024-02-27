@@ -11,6 +11,7 @@
 </script>
 
 <script lang="ts">
+  import html2canvas from "html2canvas";
   import Session from "./Session.svelte";
   import { activeSession, mutex, sessions } from "./lib/Stores";
   import {
@@ -115,6 +116,93 @@
     }
   });
 
+  let mainDiv: HTMLElement;
+
+  function fillValues(s: any) {
+    var obj = {
+      Cagliostro: "",
+      Charlotta: "",
+      Eugen: "",
+      Ferry: "",
+      Ghandagoza: "",
+      "Gran/Djeeta": "",
+      Id: "",
+      Io: "",
+      Katalina: "",
+      Lancelot: "",
+      Narmaya: "",
+      Percival: "",
+      Rackam: "",
+      Rosetta: "",
+      Siegfried: "",
+      Vane: "",
+      Vaseraga: "",
+      Yodarha: "",
+      Zeta: ""
+    } as any;
+    var lines = s.split("\n");
+    for (var i = 0; i < lines.length; i += 2) {
+      var name = lines[i];
+      var value = lines[i + 1];
+
+      if (name === "Gran" || name === "Djeeta") {
+        name = "Gran/Djeeta";
+      }
+
+      if (obj.hasOwnProperty(name) && obj[name] === "") {
+        obj[name] = value;
+      }
+    }
+
+    return obj;
+  }
+
+  // copy text
+  async function getTableColumnValues() {
+    var table = document.querySelector("main table tbody") as any;
+
+    var columnValues = [];
+
+    for (var i = 0; i < table.rows.length; i++) {
+      var secondCell = table.rows[i].cells[1]; // Index is 0-based
+      var fourthCell = table.rows[i].cells[3]; // Index is 0-based
+
+      columnValues.push(secondCell.textContent, fourthCell.textContent);
+    }
+
+    return columnValues.join("\n");
+  }
+
+  async function captureChat() {
+    const valuesStr = await getTableColumnValues();
+
+    await navigator.clipboard.writeText(valuesStr);
+  }
+
+  async function captureTab() {
+    const valuesStr = await getTableColumnValues();
+    const values = fillValues(valuesStr);
+    const tabValues = Object.values(values).join("\t");
+
+    await navigator.clipboard.writeText(tabValues);
+  }
+
+  async function capture() {
+    const canvas = await html2canvas(mainDiv);
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          "image/png": blob
+        } as any)
+      ]);
+      console.log("Image copied to clipboard");
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   onMount(() => {
     const savedSessions = loadSavedSessions();
     if (savedSessions) {
@@ -160,7 +248,7 @@
 
 {#if connected}
   {#if $sessions.some(session => session.total_dmg > 0)}
-    <div id="main">
+    <div id="main" bind:this={mainDiv}>
       <header>
         <button class="slider-prev" bind:this={prevBtn}>
           <ChevronLeft size="2.1rem" />
@@ -210,6 +298,12 @@
           {/if}
         {/each}
       </main>
+    </div>
+
+    <div>
+      <button id="capture" on:click={capture} class="button">Copy Image</button>
+      <button id="capture1" on:click={captureTab} class="button">Copy Tab</button>
+      <button id="capture2" on:click={captureChat} class="button">Copy chat</button>
     </div>
   {:else}
     <i>Waiting for battle events... </i>

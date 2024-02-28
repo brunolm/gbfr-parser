@@ -73,7 +73,7 @@ export const removeSession = (session: Session) => {
 export const getActor = (data: ActorData) => {
   const $sessions = get(sessions);
   const record = $sessions[$sessions.length - 1];
-  let characterId = toHexString(data[2]);
+  const characterId = toHexString(data[2]);
 
   let actor = record.actors?.find(e => e.player_id === data[1] || (e.party_idx === data[3] && characterId));
   if (!actor) {
@@ -196,21 +196,19 @@ export const calculateDps = (session: Session, chart?: Chart) => {
 };
 
 export const formatDuration = (start: number, end: number) => {
-  const ms = end - start;
-  let result;
-  if (ms < 1000) {
-    result = `${ms}ms`;
-  } else {
-    const sec = Math.floor(ms / 1000);
-    if (sec < 60) result = `${sec}s`;
-    else result = `${Math.floor(sec / 60)}m`;
-  }
-  return result;
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  const durationInMilliseconds = Math.abs(endDate.getTime() - startDate.getTime());
+  const minutes = Math.floor(durationInMilliseconds / 60000); // 1 minute = 60,000 milliseconds
+  const seconds = Math.floor((durationInMilliseconds % 60000) / 1000); // Remaining milliseconds as seconds
+
+  return `${minutes}m${seconds}s`;
 };
 
 export const formatTime = (start: number, end: number) => {
   const t = new Date(start);
-  let result = `${t.getHours()}:${t.getMinutes()}`;
+  const formattedTime = t.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  let result = formattedTime;
   if (end - start > 0) {
     result += ` [${formatDuration(start, end)}]`;
   }

@@ -58,6 +58,10 @@
         session.total_dmg += data.damage;
 
         const actor = getActor(data.source);
+        const target = getTarget(actor, data.target);
+
+        if (target.character_id === "022a350f") return;
+
         actor.dmg += data.damage;
         actor.dmgm += data.damage;
         ++actor.hit;
@@ -66,7 +70,6 @@
           e.percentage = e.dmg / session.total_dmg;
         });
 
-        const target = getTarget(actor, data.target);
         target.dmg += data.damage;
 
         const action = getAction(actor, data.flags & (1 << 15) ? -3 : data.action_id);

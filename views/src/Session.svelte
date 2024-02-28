@@ -167,7 +167,7 @@
     <tbody>
       {#each session.actors as actor}
         {#if actor.party_idx >= 0 && actor.dmg > 0}
-          <tr>
+          <tr class="dmg-row">
             <td>{actor.party_idx + 1}</td>
             <td style={`color: ${colors[actor.party_idx]}`}>{$_(`actors.allies.${actor.character_id}`)}</td>
             <td>{actor.dmg.toLocaleString()}</td>

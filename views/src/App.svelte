@@ -161,13 +161,13 @@
 
   // copy text
   async function getTableColumnValues() {
-    const table = document.querySelector("main table tbody") as any;
+    const trs = document.querySelectorAll("main table tbody tr.dmg-row") as any;
 
     const columnValues = [];
 
-    for (let i = 0; i < table.rows.length; i++) {
-      const secondCell = table.rows[i].cells[1]; // Index is 0-based
-      const fourthCell = table.rows[i].cells[3]; // Index is 0-based
+    for (let i = 0; i < trs.length; i++) {
+      const secondCell = trs[i].cells[1]; // Index is 0-based
+      const fourthCell = trs[i].cells[3]; // Index is 0-based
 
       columnValues.push(secondCell.textContent, fourthCell.textContent);
     }
@@ -179,7 +179,9 @@
     copyStatus = "Copying...";
     const valuesStr = await getTableColumnValues();
 
-    await navigator.clipboard.writeText(valuesStr.split("\n").join(" "));
+    const duration = (document.querySelector(".swiper-slide.active").textContent ?? "[0m]").match(/\[[\S\s]+\]/)?.[0];
+
+    await navigator.clipboard.writeText(`${duration} ${valuesStr.split("\n").join(" ")}`);
     copyStatus = "Copied!";
   }
 

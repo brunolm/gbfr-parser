@@ -113,11 +113,13 @@
     let dmgSums: any = {};
 
     for (let actor of session.actors!) {
-      for (let target of actor.targets!) {
-        if (!dmgSums[target.character_id]) {
-          dmgSums[target.character_id] = 0;
+      if (actor?.targets && Array.isArray(actor?.targets)) {
+        for (let target of actor?.targets!) {
+          if (!dmgSums[target.character_id]) {
+            dmgSums[target.character_id] = 0;
+          }
+          dmgSums[target.character_id] += target.dmg;
         }
-        dmgSums[target.character_id] += target.dmg;
       }
     }
 

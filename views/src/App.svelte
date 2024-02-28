@@ -61,9 +61,7 @@
         actor.dmgm += data.damage;
         ++actor.hit;
 
-        session.actors?.forEach(e => {
-          e.percentage = e.dmg / session.total_dmg;
-        });
+        session.actors?.forEach(e => (e.percentage = e.dmg / session.total_dmg));
 
         const target = getTarget(actor, data.target);
         target.dmg += data.damage;

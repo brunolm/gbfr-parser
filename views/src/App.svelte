@@ -118,9 +118,10 @@
   });
 
   let mainDiv: HTMLElement;
+  let copyStatus = "";
 
   function fillValues(s: any) {
-    var obj = {
+    const obj = {
       Cagliostro: "",
       Charlotta: "",
       Eugen: "",
@@ -141,10 +142,10 @@
       Yodarha: "",
       Zeta: ""
     } as any;
-    var lines = s.split("\n");
-    for (var i = 0; i < lines.length; i += 2) {
-      var name = lines[i];
-      var value = lines[i + 1];
+    const lines = s.split("\n");
+    for (let i = 0; i < lines.length; i += 2) {
+      let name = lines[i];
+      const value = lines[i + 1];
 
       if (name === "Gran" || name === "Djeeta") {
         name = "Gran/Djeeta";
@@ -160,13 +161,13 @@
 
   // copy text
   async function getTableColumnValues() {
-    var table = document.querySelector("main table tbody") as any;
+    const table = document.querySelector("main table tbody") as any;
 
-    var columnValues = [];
+    const columnValues = [];
 
-    for (var i = 0; i < table.rows.length; i++) {
-      var secondCell = table.rows[i].cells[1]; // Index is 0-based
-      var fourthCell = table.rows[i].cells[3]; // Index is 0-based
+    for (let i = 0; i < table.rows.length; i++) {
+      const secondCell = table.rows[i].cells[1]; // Index is 0-based
+      const fourthCell = table.rows[i].cells[3]; // Index is 0-based
 
       columnValues.push(secondCell.textContent, fourthCell.textContent);
     }
@@ -175,20 +176,28 @@
   }
 
   async function captureChat() {
+    copyStatus = "Copying...";
     const valuesStr = await getTableColumnValues();
 
     await navigator.clipboard.writeText(valuesStr);
+    copyStatus = "Copied!";
   }
 
   async function captureTab() {
+    copyStatus = "Copying...";
+
     const valuesStr = await getTableColumnValues();
     const values = fillValues(valuesStr);
     const tabValues = Object.values(values).join("\t");
 
     await navigator.clipboard.writeText(tabValues);
+
+    copyStatus = "Copied!";
   }
 
   async function capture() {
+    copyStatus = "Copying... Do not change tabs!";
+
     const canvas = await html2canvas(mainDiv);
     const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
 
@@ -201,7 +210,10 @@
       console.log("Image copied to clipboard");
     } catch (err) {
       console.error(err);
+      copyStatus = err;
     }
+
+    copyStatus = "Copied!";
   }
 
   onMount(() => {
@@ -302,6 +314,7 @@
     </div>
 
     <div>
+      <p style="text-align: center">{copyStatus}</p>
       <button id="capture" on:click={capture} class="button">Copy Image</button>
       <button id="capture1" on:click={captureTab} class="button">Copy Tab</button>
       <button id="capture2" on:click={captureChat} class="button">Copy chat</button>

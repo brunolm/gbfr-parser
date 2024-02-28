@@ -179,7 +179,7 @@
     copyStatus = "Copying...";
     const valuesStr = await getTableColumnValues();
 
-    await navigator.clipboard.writeText(valuesStr);
+    await navigator.clipboard.writeText(valuesStr.split("\n").join(" "));
     copyStatus = "Copied!";
   }
 

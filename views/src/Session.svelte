@@ -104,7 +104,7 @@
       characterId = "9498420d";
     }
 
-    let v = $_(`actors.${characterId}`);
+    let v = $_(`actors.enemies.${characterId}`);
     return v ?? characterId;
   };
 

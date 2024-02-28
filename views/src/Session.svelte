@@ -167,7 +167,7 @@
         {#if actor.party_idx >= 0 && actor.dmg > 0}
           <tr>
             <td>{actor.party_idx + 1}</td>
-            <td style={`color: ${colors[actor.party_idx]}`}>{$_(`actors.${actor.character_id}`)}</td>
+            <td style={`color: ${colors[actor.party_idx]}`}>{$_(`actors.allies.${actor.character_id}`)}</td>
             <td>{actor.dmg.toLocaleString()}</td>
             <td>{(actor.dps || 0).toLocaleString()}</td>
             <td>{(Number(actor.percentage || 0) * 100).toLocaleString(undefined, { maximumFractionDigits: 1 })}%</td>

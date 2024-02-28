@@ -1,3 +1,6 @@
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+
 <script lang="ts" context="module">
   import { _ } from "svelte-i18n";
   import { get } from "svelte/store";
@@ -13,41 +16,38 @@
     { key: "max", text: "Max. DMG" }
   ];
 
-  const headersTarget: { key?: any; text: string }[] = [
-    { key: "target", text: "Target" },
-    { key: "dmg", text: "Damage" }
+  const targetHeaders: { key?: keyof ActorRecord; text: string }[] = [
+    { text: "Target" },
+    { key: "dmg", text: "Damage Dealt" }
   ];
 </script>
 
 <script lang="ts">
   export let actor: ActorRecord;
 
-  let sortBy: keyof ActionRecord = "dmg";
-  let descending = true;
-  let sortByTarget = "dmg";
-  let descendingTarget = true;
+  let targetSortBy: keyof ActorRecord = "dmg";
+  let targetDescending = true;
+
+  let actionSortBy: keyof ActionRecord = "dmg";
+  let actionDescending = true;
 
   $: {
-    actor.actions = actor.actions?.sort((a, b) => {
-      if (descending) {
-        return Number(a[sortBy]) > Number(b[sortBy]) ? -1 : 1;
-      }
-      return Number(a[sortBy]) < Number(b[sortBy]) ? -1 : 1;
+    actor.targets = actor.targets?.sort((a, b) => {
+      const r = targetDescending
+        ? Number(a[targetSortBy]) > Number(b[targetSortBy])
+        : Number(a[targetSortBy]) < Number(b[targetSortBy]);
+      return r ? -1 : 1;
     });
-  }
-
-  $: {
-    actor.targets = (actor.targets as any)?.sort((a: any, b: any) => {
-      if (descendingTarget) {
-        return Number(a[sortByTarget]) > Number(b[sortByTarget]) ? -1 : 1;
-      }
-      return Number(a[sortByTarget]) < Number(b[sortByTarget]) ? -1 : 1;
+    actor.actions = actor.actions?.sort((a, b) => {
+      const r = actionDescending
+        ? Number(a[actionSortBy]) > Number(b[actionSortBy])
+        : Number(a[actionSortBy]) < Number(b[actionSortBy]);
+      return r ? -1 : 1;
     });
   }
 
   const getActionName = (characterId: string, actionId: number) => {
     const $_ = get(_);
-
     if (characterId === "26a4848a") {
       characterId = "9498420d";
     }
@@ -71,25 +71,30 @@
   };
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <table>
+  <colgroup>
+    <col span="1" />
+    <col width="70" />
+    <col width="110" />
+    <col width="125" />
+    <col width="125" />
+  </colgroup>
   <thead>
     <tr>
       {#each headers as header}
         <th
           scope="col"
           class={header.key ? "sortable" : undefined}
-          data-active={sortBy === header.key || undefined}
+          data-active={actionSortBy === header.key || undefined}
           on:click={header.key
             ? () => {
-                if (header.key) sortBy = header.key;
-                descending = !descending;
+                if (header.key) actionSortBy = header.key;
+                actionDescending = !actionDescending;
               }
             : undefined}
         >
-          {#if sortBy === header.key}
-            <svelte:component this={descending ? SortDescending : SortAscending} size="2.1rem" />
+          {#if actionSortBy === header.key}
+            <svelte:component this={actionDescending ? SortDescending : SortAscending} size="2.1rem" />
           {/if}
           {header.text}
         </th>
@@ -111,39 +116,54 @@
   </tbody>
 </table>
 
-<br />
-
-<table>
-  <thead>
-    <tr>
-      {#each headersTarget as header}
-        <th
-          scope="col"
-          class={header.key ? "sortable" : undefined}
-          data-active={sortByTarget === header.key || undefined}
-          on:click={header.key
-            ? () => {
-                if (header.key) sortByTarget = header.key;
-                descending = !descending;
-              }
-            : undefined}
-        >
-          {#if sortByTarget === header.key}
-            <svelte:component this={descending ? SortDescending : SortAscending} size="2.1rem" />
-          {/if}
-          {header.text}
-        </th>
-      {/each}
-    </tr>
-  </thead>
-  <tbody>
-    {#if actor.targets?.length}
-      {#each actor.targets || [] as target}
+{#if actor.targets?.length}
+  <div>
+    <table>
+      <colgroup>
+        <col span="1" />
+        <col span="1" />
+        <col span="1" />
+        <col span="1" />
+        <col span="1" />
+        <col span="1" />
+        <col span="1" />
+      </colgroup>
+      <thead>
         <tr>
-          <td>{getTargetName(target.character_id)}</td>
-          <td>{target.dmg.toLocaleString()}</td>
+          {#each targetHeaders as header}
+            <th
+              scope="col"
+              class={header.key ? "sortable" : undefined}
+              data-active={targetSortBy === header.key || undefined}
+              on:click={header.key
+                ? () => {
+                    if (header.key) targetSortBy = header.key;
+                    targetDescending = !targetDescending;
+                  }
+                : undefined}
+            >
+              {#if targetSortBy === header.key}
+                <svelte:component this={targetDescending ? SortDescending : SortAscending} size="2.1rem" />
+              {/if}
+              {header.text}
+            </th>
+          {/each}
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
         </tr>
-      {/each}
-    {/if}
-  </tbody>
-</table>
+      </thead>
+      <tbody>
+        {#each actor.targets as target}
+          <tr>
+            <td>{$_(`actors.enemies.${target.character_id}`)}</td>
+            <td>{target.dmg.toLocaleString()}</td>
+            <td></td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  </div>
+{/if}

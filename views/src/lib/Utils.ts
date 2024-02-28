@@ -10,11 +10,12 @@ export const loadSavedSessions = (): Session[] => {
   if (!json) return [];
 
   const data: Session[] = JSON.parse(json);
-  data.forEach(session => {
-    if ((session as any).last_at) {
-      session.start_damage_at = session.start_at;
-      session.last_damage_at = (session as any).last_at;
-    }
+  data.forEach(e => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (!(e as any).last_at) return;
+    e.start_damage_at = e.start_at;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    e.last_damage_at = (e as any).last_at;
   });
 
   return data;
@@ -153,36 +154,36 @@ export const calculateDps = (session: Session, chart?: Chart) => {
       const real = Math.round((+new Date() - session.start_damage_at) / 1000);
       const fullm = Math.min(60, real);
 
-      for (const actor of session.actors) {
-        actor.dps = Math.floor(actor.dmg / full);
-        actor.dpsm = Math.floor(actor.dmgm / fullm);
-      }
+      session.actors.forEach(e => {
+        e.dps = Math.floor(e.dmg / full);
+        e.dpsm = Math.floor(e.dmgm / fullm);
+      });
 
       if (real > 0 && session.last_chart_update !== session.last_damage_at) {
         if (period > 0) {
           const min_time = real - period;
-          for (const dataset of session.chart.datasets) {
-            const idx = dataset.data.findIndex(d => d.x > min_time);
+          session.chart.datasets.forEach(e => {
+            const idx = e.data.findIndex(d => d.x > min_time);
             if (idx >= 0) {
-              dataset.data = dataset.data.slice(idx);
+              e.data = e.data.slice(idx);
             }
-          }
+          });
         }
 
-        session.actors.forEach(actor => {
-          const label = `[${actor.party_idx + 1}] ` + $_(`actors.${actor.character_id}`);
+        session.actors.forEach(e => {
+          const label = `[${e.party_idx + 1}] ` + $_(`actors.allies.${e.character_id}`);
           let dataset: DataSet | undefined = session.chart.datasets.find(ds => ds.label === label);
           if (!dataset) {
             dataset = {
               label,
               data: [],
-              borderColor: colors[actor.party_idx],
-              backgroundColor: colors[actor.party_idx],
+              borderColor: colors[e.party_idx],
+              backgroundColor: colors[e.party_idx],
               fill: false
             };
             session.chart.datasets.push(dataset);
           }
-          dataset.data.push({ x: real, y: actor.dpsm || 0 });
+          dataset.data.push({ x: real, y: e.dpsm || 0 });
         });
 
         chart?.update();

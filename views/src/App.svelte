@@ -36,7 +36,7 @@
 
   const onDamage = (data: EventData, time: number) => {
     mutex.wrap(async () => {
-      if (data.source[3] === -1 || data.damage <= 0) return;
+      if (data.source[3] === -1 || data.damage <= 0 || data.target[2] === 36320527) return;
 
       let session = $sessions[$sessions.length - 1];
       if (!session || session.done) {
@@ -66,9 +66,7 @@
         actor.dmgm += data.damage;
         ++actor.hit;
 
-        session.actors?.forEach(e => {
-          e.percentage = e.dmg / session.total_dmg;
-        });
+        session.actors?.forEach(e => (e.percentage = e.dmg / session.total_dmg));
 
         target.dmg += data.damage;
 

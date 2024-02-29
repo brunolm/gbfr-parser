@@ -181,7 +181,7 @@
 
     const duration = (document.querySelector(".swiper-slide.active").textContent ?? "[0m]").match(/\[[\S\s]+\]/)?.[0];
 
-    await navigator.clipboard.writeText(`${duration} ${valuesStr.split("\n").join(" ")}`);
+    await navigator.clipboard.writeText(`[${duration}] ${valuesStr.split("\n").join(" ")}`);
     copyStatus = "Copied!";
   }
 

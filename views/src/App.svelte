@@ -218,6 +218,14 @@
     copyStatus = "Copied!";
   }
 
+  async function clearAll() {
+    if (confirm("Are you sure you want to clear all data?")) {
+      $sessions = [];
+      $activeSession = null;
+      saveSessions();
+    }
+  }
+
   onMount(() => {
     const savedSessions = loadSavedSessions();
     if (savedSessions) {
@@ -320,6 +328,10 @@
       <button id="capture" on:click={capture} class="button">Copy Image</button>
       <button id="capture1" on:click={captureTab} class="button">Copy Tab</button>
       <button id="capture2" on:click={captureChat} class="button">Copy chat</button>
+    </div>
+
+    <div>
+      <button id="clearAll" on:click={clearAll} class="button">Clear all</button>
     </div>
   {:else}
     <i>Waiting for battle events... </i>

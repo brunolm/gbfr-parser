@@ -7,7 +7,7 @@ import Mutex from "./Mutex";
 import { activeSession, mutex, sessions } from "./Stores";
 
 export const loadSavedSessions = async () => {
-  const data = await idb.get("sessions");
+  const data = (await idb.get("sessions")) ?? [];
   data.forEach(e => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (!(e as any).last_at) return;

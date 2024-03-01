@@ -2,14 +2,12 @@ import type { Chart } from "chart.js";
 import { _ } from "svelte-i18n";
 import { get } from "svelte/store";
 import { colors, period } from "./Constants";
+import * as idb from "./IndexDB";
 import Mutex from "./Mutex";
 import { activeSession, mutex, sessions } from "./Stores";
 
-export const loadSavedSessions = (): Session[] => {
-  const json = localStorage.getItem("sessions");
-  if (!json) return [];
-
-  const data: Session[] = JSON.parse(json);
+export const loadSavedSessions = async () => {
+  const data = await idb.get("sessions");
   data.forEach(e => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (!(e as any).last_at) return;
@@ -21,7 +19,7 @@ export const loadSavedSessions = (): Session[] => {
   return data;
 };
 
-export const saveSessions = () => {
+export const saveSessions = async () => {
   let clones: Session[] = JSON.parse(JSON.stringify(get(sessions)));
   clones = clones.filter(session => {
     delete session.mutex;
@@ -29,7 +27,7 @@ export const saveSessions = () => {
     return session.total_dmg > 0;
   });
 
-  localStorage.setItem("sessions", JSON.stringify(clones));
+  await idb.set("sessions", clones);
 };
 
 export const createSession = (time: number) => {

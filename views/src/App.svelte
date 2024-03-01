@@ -226,8 +226,8 @@
     }
   }
 
-  onMount(() => {
-    const savedSessions = loadSavedSessions();
+  onMount(async () => {
+    const savedSessions = await loadSavedSessions();
     if (savedSessions) {
       $sessions = savedSessions;
       $activeSession = $sessions[$sessions.length - 1];

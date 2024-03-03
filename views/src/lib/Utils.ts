@@ -21,6 +21,14 @@ export const loadSavedSessions = async () => {
 
 export const saveSessions = async () => {
   let clones: Session[] = JSON.parse(JSON.stringify(get(sessions)));
+
+  if (localStorage.sessions) {
+    const bkp = JSON.parse(localStorage.sessions);
+    delete localStorage.sessions;
+    localStorage.bkp = JSON.stringify(bkp);
+    clones.unshift(...bkp);
+  }
+
   clones = clones.filter(session => {
     delete session.mutex;
     session.done = true;

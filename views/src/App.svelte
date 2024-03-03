@@ -140,7 +140,9 @@
       Vane: "",
       Vaseraga: "",
       Yodarha: "",
-      Zeta: ""
+      Zeta: "",
+      Clone1: "",
+      Clone2: ""
     } as any;
     const lines = s.split("\n");
     for (let i = 0; i < lines.length; i += 2) {
@@ -151,8 +153,14 @@
         name = "Gran/Djeeta";
       }
 
-      if (obj.hasOwnProperty(name) && obj[name] === "") {
-        obj[name] = value;
+      if (obj.hasOwnProperty(name)) {
+        if (obj[name] === "") {
+          obj[name] = value;
+        } else if (obj["Clone1"] === "") {
+          obj["Clone1"] = value;
+        } else if (obj["Clone2"] === "") {
+          obj["Clone2"] = value;
+        }
       }
     }
 

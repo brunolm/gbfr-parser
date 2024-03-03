@@ -226,6 +226,17 @@
     copyStatus = "Copied!";
   }
 
+  async function saveAll() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify($sessions));
+    const downloadAnchorElem = document.createElement("a");
+    downloadAnchorElem.setAttribute("href", dataStr);
+    downloadAnchorElem.setAttribute("download", "gbfr-parse-data.json");
+
+    document.body.appendChild(downloadAnchorElem);
+    downloadAnchorElem.click();
+    downloadAnchorElem.remove();
+  }
+
   async function clearAll() {
     if (confirm("Are you sure you want to clear all data?")) {
       $sessions = [];
@@ -339,7 +350,8 @@
     </div>
 
     <div>
-      <button id="clearAll" on:click={clearAll} class="button">Clear all</button>
+      <button id="saveAll" on:click={saveAll} class="button button-sm">Save All</button>
+      <button id="clearAll" on:click={clearAll} class="button button-sm">Clear all</button>
     </div>
   {:else}
     <i>Waiting for battle events... </i>

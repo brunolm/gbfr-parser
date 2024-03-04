@@ -13,6 +13,7 @@
     { key: "party_idx", text: "#" },
     { text: "Name" },
     { key: "dmg", text: "Damage" },
+    { key: "pdmg", text: "PrimaryDamage" },
     { key: "dps", text: "DPS" },
     { key: "percentage", text: "%" }
   ];
@@ -22,7 +23,7 @@
   import Breakdown from "./Breakdown.svelte";
   import { colors } from "./lib/Constants";
   import { sessions } from "./lib/Stores";
-  import { calculateDps, pruneEvents } from "./lib/Utils";
+  import { calculateDps, formatDuration, pruneEvents } from "./lib/Utils";
 
   export let session: Session;
 
@@ -125,18 +126,27 @@
 
     maxDmgCharacterId = Object.keys(dmgSums).reduce((a, b) => (dmgSums[a] > dmgSums[b] ? a : b));
   }
+
+  const getPrimaryTargetDamage = (actor: ActorRecord) => {
+    if (!actor?.targets) {
+      return 0;
+    }
+
+    return Math.max(...actor.targets.map(t => t.dmg));
+  };
 </script>
 
 {#if session.actors && session.total_dmg > 0}
   <div style="text-align: center; padding: 1em;">
     <h2>
-      {getTargetName(maxDmgCharacterId)}
+      {getTargetName(maxDmgCharacterId)} [{formatDuration(session.start_damage_at, session.last_damage_at)}]
     </h2>
   </div>
   <table>
     <colgroup>
       <col width="50" />
       <col width="150" />
+      <col span="1" />
       <col span="1" />
       <col span="1" />
       <col span="1" />
@@ -171,6 +181,7 @@
             <td>{actor.party_idx + 1}</td>
             <td style={`color: ${colors[actor.party_idx]}`}>{$_(`actors.allies.${actor.character_id}`)}</td>
             <td>{actor.dmg.toLocaleString()}</td>
+            <td>{getPrimaryTargetDamage(actor).toLocaleString()}</td>
             <td>{(actor.dps || 0).toLocaleString()}</td>
             <td>{(Number(actor.percentage || 0) * 100).toLocaleString(undefined, { maximumFractionDigits: 1 })}%</td>
             <td style="padding: 0">

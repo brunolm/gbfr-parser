@@ -3,8 +3,6 @@
   import Swiper from "swiper";
   import { Navigation } from "swiper/modules";
 
-  import ChevronLeft from "svelte-material-icons/ChevronLeft.svelte";
-  import ChevronRight from "svelte-material-icons/ChevronRight.svelte";
   import Close from "svelte-material-icons/Close.svelte";
 
   const debug = false;
@@ -12,6 +10,8 @@
 
 <script lang="ts">
   import html2canvas from "html2canvas";
+  import { _ } from "svelte-i18n";
+  import { get } from "svelte/store";
   import Session from "./Session.svelte";
   import { activeSession, mutex, sessions } from "./lib/Stores";
   import {
@@ -286,62 +286,88 @@
     };
     save();
   });
+
+  const getTargetName = (characterId: string) => {
+    if (!characterId) return "Target";
+    const $_ = get(_);
+
+    if (characterId === "26a4848a") {
+      characterId = "9498420d";
+    }
+
+    let v = $_(`actors.enemies.${characterId}`);
+    return v ?? characterId;
+  };
+
+  const getTargetMostDamageTaken = (session: globalThis.Session) => {
+    if (!session || !session.actors) return;
+    let maxDmgCharacterId: any;
+
+    let dmgSums: any = {};
+
+    for (let actor of session.actors!) {
+      if (actor?.targets && Array.isArray(actor?.targets)) {
+        for (let target of actor?.targets!) {
+          if (!dmgSums[target.character_id]) {
+            dmgSums[target.character_id] = 0;
+          }
+          dmgSums[target.character_id] += target.dmg;
+        }
+      }
+    }
+
+    maxDmgCharacterId = Object.keys(dmgSums).reduce((a, b) => (dmgSums[a] > dmgSums[b] ? a : b));
+
+    return maxDmgCharacterId;
+  };
 </script>
 
 {#if connected}
   {#if $sessions.some(session => session.total_dmg > 0)}
-    <div id="main" bind:this={mainDiv}>
-      <header>
-        <button class="slider-prev" bind:this={prevBtn}>
-          <ChevronLeft size="2.1rem" />
-        </button>
-        <div class="slider-wrapper">
-          <div class="swiper" bind:this={swiperRoot}>
-            <div class="swiper-wrapper">
-              {#each $sessions as session, idx}
-                {#if session.total_dmg > 0}
-                  <button
-                    class={`swiper-slide` + ($activeSession === session ? " active" : "")}
-                    type="button"
-                    on:click|self={() => ($activeSession = session)}
-                  >
-                    {formatTime(session.start_damage_at, session.last_damage_at)}
-                    <!-- svelte-ignore a11y-no-static-element-interactions -->
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <span
-                      on:click={() => {
-                        removeSession(session);
-                        if (swiper) {
-                          window.requestAnimationFrame(() => swiper.update());
-                          if ($activeSession === session) {
-                            window.requestAnimationFrame(() => swiper.slideTo($sessions.indexOf($activeSession)));
-                          }
-                        }
-                      }}
-                    >
-                      <Close size="1.6rem" />
-                    </span>
-                  </button>
-                {/if}
-              {/each}
-            </div>
-          </div>
-        </div>
-        <button class="slider-next" bind:this={nextBtn}>
-          <ChevronRight size="2.1rem" />
-        </button>
-      </header>
-      <main>
-        {#each $sessions as session (session.start_at)}
-          {#if $activeSession === session}
-            {#key session.start_at}
-              <Session bind:session />
-            {/key}
+    <div class="flex container">
+      <div class="vertical-tabs">
+        {#each [...$sessions].reverse() as session, idx}
+          {#if session.total_dmg > 0}
+            <button
+              class={`item` + ($activeSession === session ? " active" : "")}
+              type="button"
+              on:click|self={() => ($activeSession = session)}
+            >
+              {getTargetName(getTargetMostDamageTaken(session))} -
+              {formatTime(session.start_damage_at, session.last_damage_at)}
+              <!-- svelte-ignore a11y-no-static-element-interactions -->
+              <!-- svelte-ignore a11y-click-events-have-key-events -->
+              <span
+                class="remove-session"
+                on:click={() => {
+                  removeSession(session);
+                  if (swiper) {
+                    window.requestAnimationFrame(() => swiper.update());
+                    if ($activeSession === session) {
+                      window.requestAnimationFrame(() => swiper.slideTo($sessions.indexOf($activeSession)));
+                    }
+                  }
+                }}
+              >
+                <Close size="1.6rem" />
+              </span>
+            </button>
           {/if}
         {/each}
-      </main>
-    </div>
+      </div>
 
+      <div id="main" bind:this={mainDiv}>
+        <main>
+          {#each $sessions as session (session.start_at)}
+            {#if $activeSession === session}
+              {#key session.start_at}
+                <Session bind:session />
+              {/key}
+            {/if}
+          {/each}
+        </main>
+      </div>
+    </div>
     <div>
       <p style="text-align: center">{copyStatus}</p>
       <button id="capture" on:click={capture} class="button">Copy Image</button>

@@ -90,6 +90,7 @@ export const getActor = (data: ActorData) => {
       party_idx: data[3],
       dmg: 0,
       dmgm: 0,
+      pdmg: 0,
       hit: 0
     };
     if (!record.actors) record.actors = [];
@@ -107,6 +108,7 @@ export const getTarget = (actor: ActorRecord, data: ActorData) => {
       party_idx: data[3],
       dmg: 0,
       dmgm: 0,
+      pdmg: 0,
       hit: 0
     };
     if (!actor.targets) actor.targets = [];

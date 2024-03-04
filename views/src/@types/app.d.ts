@@ -39,6 +39,7 @@ declare global {
     party_idx: number;
 
     dmg: number;
+    pdmg: number;
     dmgm: number;
     hit: number;
 

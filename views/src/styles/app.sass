@@ -86,7 +86,7 @@ b
   margin: auto
   width: 100%
   min-width: 40rem
-  max-width: 80rem
+  max-width: 90rem
 
 $header-height: 3.2rem
 header
@@ -236,3 +236,27 @@ canvas
 
 .button-sm
   padding: 1rem
+
+.flex
+  display: flex
+
+.container
+  align-items: flex-start
+  gap: 1em
+
+.vertical-tabs
+  display: flex
+  max-height: 80vh
+  overflow-y: auto
+  flex-direction: column
+
+.vertical-tabs button
+  display: block
+  font-size: 14px
+  text-align: right
+
+.vertical-tabs .active
+  color: #53f753
+
+.vertical-tabs .remove-session
+  color: rgba(255, 0, 0, 0.55)

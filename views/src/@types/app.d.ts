@@ -40,6 +40,7 @@ declare global {
 
     dmg: number;
     pdmg: number;
+    pdps: number;
     dmgm: number;
     hit: number;
 

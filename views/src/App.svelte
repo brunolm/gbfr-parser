@@ -182,6 +182,20 @@
 
     return columnValues.join("\n");
   }
+  async function getTableColumnValuesPdps() {
+    const trs = document.querySelectorAll("main table tbody tr.dmg-row") as any;
+
+    const columnValues = [];
+
+    for (let i = 0; i < trs.length; i++) {
+      const secondCell = trs[i].cells[1]; // Index is 0-based
+      const fourthCell = trs[i].cells[5]; // Index is 0-based
+
+      columnValues.push(secondCell.textContent, fourthCell.textContent);
+    }
+
+    return columnValues.join("\n");
+  }
 
   async function captureChat() {
     copyStatus = "Copying...";
@@ -197,6 +211,18 @@
     copyStatus = "Copying...";
 
     const valuesStr = await getTableColumnValues();
+    const values = fillValues(valuesStr);
+    const tabValues = Object.values(values).join("\t");
+
+    await navigator.clipboard.writeText(tabValues);
+
+    copyStatus = "Copied!";
+  }
+
+  async function captureTabPdps() {
+    copyStatus = "Copying...";
+
+    const valuesStr = await getTableColumnValuesPdps();
     const values = fillValues(valuesStr);
     const tabValues = Object.values(values).join("\t");
 
@@ -385,6 +411,7 @@
       <p style="text-align: center">{copyStatus}</p>
       <button id="capture" on:click={capture} class="button">Copy Image</button>
       <button id="capture1" on:click={captureTab} class="button">Copy Tab</button>
+      <button id="capture1" on:click={captureTabPdps} class="button">Copy Tab PDPS</button>
       <button id="capture2" on:click={captureChat} class="button">Copy chat</button>
     </div>
 

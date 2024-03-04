@@ -320,11 +320,24 @@
 
     return maxDmgCharacterId;
   };
+
+  const expandCollapse = () => {
+    let element = document.querySelector<HTMLDivElement>(".vertical-tabs");
+    const currentDisplay = window.getComputedStyle(element).display;
+    if (currentDisplay === "flex") {
+      document.querySelector<HTMLDivElement>(".vertical-tabs").style.display = "none";
+      document.querySelector<HTMLDivElement>(".expand-collapse").innerHTML = "⬅️";
+    } else {
+      document.querySelector<HTMLDivElement>(".vertical-tabs").style.display = "flex";
+      document.querySelector<HTMLDivElement>(".expand-collapse").innerHTML = "➡️";
+    }
+  };
 </script>
 
 {#if connected}
   {#if $sessions.some(session => session.total_dmg > 0)}
     <div class="flex container">
+      <button class="expand-collapse" on:click={expandCollapse}>➡️</button>
       <div class="vertical-tabs">
         {#each [...$sessions].reverse() as session, idx}
           {#if session.total_dmg > 0}

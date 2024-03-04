@@ -15,7 +15,7 @@
     { key: "dmg", text: "Damage" },
     { key: "dps", text: "DPS" },
     { key: "pdmg", text: "PrimaryDamage" },
-    { key: "pdps", text: "PrimaryDps" },
+    { key: "pdps", text: "PDPS" },
     { key: "percentage", text: "%" }
   ];
 </script>

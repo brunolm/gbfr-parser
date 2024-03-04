@@ -201,7 +201,7 @@
     copyStatus = "Copying...";
     const valuesStr = await getTableColumnValues();
 
-    const duration = (document.querySelector(".swiper-slide.active").textContent ?? "[0m]").match(/\[[\S\s]+\]/)?.[0];
+    const duration = (document.querySelector(".active").textContent ?? "[0m]").match(/\[[\S\s]+\]/)?.[0];
 
     await navigator.clipboard.writeText(`${duration} \n${valuesStr.split("\n").join(" \n")}`);
     copyStatus = "Copied!";

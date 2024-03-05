@@ -130,6 +130,8 @@
     let dmgSums: any = {};
 
     for (let actor of session.actors!) {
+      actor.pdmg = getPrimaryTargetDamage(actor);
+      actor.pdps = getPrimaryTargetDps(actor);
       if (actor?.targets && Array.isArray(actor?.targets)) {
         for (let target of actor?.targets!) {
           if (!dmgSums[target.character_id]) {

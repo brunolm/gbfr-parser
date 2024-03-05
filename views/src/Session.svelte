@@ -48,6 +48,9 @@
     });
 
     for (const actor of session.actors) {
+      if (!Array.isArray(actor.actions)) {
+        continue;
+      }
       for (const action of actor.actions) {
         const cap = dmgcap.actions?.[actor.character_id]?.[action.idx];
 

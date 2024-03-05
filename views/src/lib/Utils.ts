@@ -91,6 +91,7 @@ export const getActor = (data: ActorData) => {
       dmg: 0,
       dmgm: 0,
       pdmg: 0,
+      pdps: 0,
       hit: 0
     };
     if (!record.actors) record.actors = [];
@@ -109,6 +110,7 @@ export const getTarget = (actor: ActorRecord, data: ActorData) => {
       dmg: 0,
       dmgm: 0,
       pdmg: 0,
+      pdps: 0,
       hit: 0
     };
     if (!actor.targets) actor.targets = [];
@@ -191,7 +193,7 @@ export const calculateDps = (session: Session, chart?: Chart) => {
             };
             session.chart.datasets.push(dataset);
           }
-          dataset.data.push({ x: real, y: e.dpsm || 0 });
+          dataset.data.push({ x: real, y: Math.max(e.dpsm, 0) || 0 });
         });
 
         chart?.update();

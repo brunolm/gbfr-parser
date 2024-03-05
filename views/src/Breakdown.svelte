@@ -13,7 +13,8 @@
     { key: "hit", text: "Hits" },
     { key: "dmg", text: "Damage" },
     { key: "min", text: "Min. DMG" },
-    { key: "max", text: "Max. DMG" }
+    { key: "max", text: "Max. DMG" },
+    { key: "cap", text: "Cap w/ War" }
   ];
 
   const targetHeaders: { key?: keyof ActorRecord; text: string }[] = [
@@ -78,6 +79,7 @@
     <col width="110" />
     <col width="125" />
     <col width="125" />
+    <col width="100" />
   </colgroup>
   <thead>
     <tr>
@@ -110,6 +112,7 @@
           <td>{action.dmg.toLocaleString()}</td>
           <td>{action.min.toLocaleString()}</td>
           <td>{action.max.toLocaleString()}</td>
+          <td>{action.capWar?.toLocaleString() ?? 0}</td>
         </tr>
       {/each}
     {/if}

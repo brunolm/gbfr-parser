@@ -13,6 +13,9 @@ declare global {
     flags: number;
     source: ActorData;
     target: ActorData;
+    dmgCap: number;
+    flags: number;
+    attackRate: number;
   }
 
   // [0]source_type, [1]player_id, [2]character_id, [3]party_idx
@@ -23,6 +26,8 @@ declare global {
     dmg: number;
     source: ActorData;
     target: ActorData;
+    cap: number;
+    capWar: number;
   }
 
   interface ActionRecord {
@@ -31,6 +36,8 @@ declare global {
     dmg: number;
     min: number;
     max: number;
+    cap: number;
+    capWar: number;
   }
 
   interface ActorRecord {

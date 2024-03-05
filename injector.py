@@ -1742,6 +1742,7 @@ i8_from = Process.current.read_i8  # lambda a: ctypes.c_int8.from_address(a).val
 i32_from = Process.current.read_i32  # lambda a: ctypes.c_int32.from_address(a).value
 u32_from = Process.current.read_u32  # lambda a: ctypes.c_uint32.from_address(a).value
 u64_from = Process.current.read_u64  # lambda a: ctypes.c_uint64.from_address(a).value
+float_from = Process.current.read_float
 v_func = lambda a, off: size_t_from(size_t_from(a) + off)
 
 i_actor_0x48 = ctypes.CFUNCTYPE(ctypes.c_size_t, ctypes.c_size_t, ctypes.c_size_t)
@@ -1847,13 +1848,16 @@ class Act:
         try:
             dmg = i32_from(a2 + 0xd0)
             flags_ = u64_from(a2 + 0xd8)
+            critical = i8_from(a2 + 0x149)
+            dmgCap = i32_from(a2 + 0x264)
+            attackRate = float_from(a2 + 0xd4)
             if (1 << 7 | 1 << 50) & flags_:
                 action_id = -1  # link attack
             elif (1 << 13 | 1 << 14) & flags_:
                 action_id = -2  # limit break
             else:
                 action_id = u32_from(a2 + 0x154)
-            self._on_damage(source, target, dmg, flags_, action_id)
+            self._on_damage(source, target, dmg, flags_, action_id, critical, dmgCap, attackRate)
         except:
             logging.error('on_process_damage_evt', exc_info=True)
         return res
@@ -1883,7 +1887,7 @@ class Act:
         return res
 
     if 1:
-        def _on_damage(self, source, target, damage, flags, action_id):
+        def _on_damage(self, source, target, damage, flags, action_id, critical, dmgCap, attackRate):
             # TODO: 找个通用方法溯源
             source_type_id = actor_type_id(source)
             if source_type_id == 0x2af678e8:  # 菲莉宝宝 # Pl0700Ghost
@@ -1894,9 +1898,9 @@ class Act:
                 source = size_t_from(size_t_from(source + 0x578) + 0x70)
             elif source_type_id == 0xf5755c0e:  # 龙人化 # Pl2000
                 source = size_t_from(size_t_from(source + 0xD028) + 0x70)
-            return self.on_damage(self.actor_data(source), self.actor_data(target), damage, flags, action_id)
+            return self.on_damage(self.actor_data(source), self.actor_data(target), damage, flags, action_id, critical, dmgCap, attackRate)
     else:
-        def _on_damage(self, source, target, damage, flags, action_id):
+        def _on_damage(self, source, target, damage, flags, action_id, critical, dmgCap, attackRate):
             # TODO: 找个通用方法溯源
             source_base_name = actor_base_name(source)
             if source_base_name == b'Pl0700Ghost':  # 菲莉宝宝 # Pl0700Ghost
@@ -1907,7 +1911,7 @@ class Act:
                 source = size_t_from(size_t_from(source + 0x578) + 0x70)
             elif source_base_name == b'Pl2000':  # 龙人化 # Pl2000
                 source = size_t_from(size_t_from(source + 0xD028) + 0x70)
-            return self.on_damage(self.actor_data(source), self.actor_data(target), damage, flags, action_id)
+            return self.on_damage(self.actor_data(source), self.actor_data(target), damage, flags, action_id, critical, dmgCap, attackRate)
 
     def on_damage(self, source, target, damage, flags, action_id):
         pass

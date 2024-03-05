@@ -1,21 +1,20 @@
-import hashlib
 import base64
+import codecs
+import errno
+import hashlib
 import json
 import os
 import socket
-import struct
 import ssl
+import struct
 import sys
 import threading
 import time
 import traceback
-
-import errno
-import codecs
 from collections import deque
-from select import select
 from http.server import BaseHTTPRequestHandler  # pylint: disable=import-error
-from io import StringIO, BytesIO
+from io import BytesIO, StringIO
+from select import select
 
 unicode = str  # pylint: disable=redefined-builtin
 
@@ -714,7 +713,7 @@ if __name__ == '__main__':
     if _current_dir not in sys.path:
         sys.path.insert(0, _current_dir)
 
-from injector import Act, Process, run_admin, enable_privilege
+from injector import Act, Process, enable_privilege, run_admin
 
 
 class ActWs(Act):
@@ -723,7 +722,7 @@ class ActWs(Act):
         self.ws_server = WebSocketServer('', 24399, BroadcastHandler)
         self.ws_thread = threading.Thread(target=self.ws_server.serve_forever)
 
-    def on_damage(self, source, target, damage, flags, action_id):
+    def on_damage(self, source, target, damage, flags, action_id, critical, dmgCap, attackRate):
         BroadcastHandler.broadcast({
             'time_ms': int(time.time() * 1000),
             'type': 'damage',
@@ -732,7 +731,10 @@ class ActWs(Act):
                 'target': target,
                 'action_id': action_id,
                 'damage': damage,
-                'flags': flags
+                'flags': flags,
+                'critical': critical,
+                'dmgCap': dmgCap,
+                'attackRate': attackRate
             }
         })
 

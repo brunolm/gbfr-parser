@@ -25,6 +25,8 @@
     saveSessions
   } from "./lib/Utils";
 
+  const win = window as any;
+
   let ws: WebSocket;
   let updateActiveSession = false;
   let connected = false;
@@ -72,6 +74,8 @@
 
         const action = getAction(actor, data.flags & (1 << 15) ? -3 : data.action_id);
         action.dmg += data.damage;
+        action.capWar = data.dmgCap + data.dmgCap * 0.2;
+        action.cap = data.dmgCap;
         ++action.hit;
 
         if (action.min === -1 || action.min > data.damage) action.min = data.damage;
@@ -81,6 +85,8 @@
         session.events.push({
           time: time,
           dmg: data.damage,
+          capWar: data.dmgCap + data.dmgCap * 0.2,
+          cap: data.dmgCap,
           source: data.source,
           target: data.target
         });
@@ -370,7 +376,10 @@
             <button
               class={`item` + ($activeSession === session ? " active" : "")}
               type="button"
-              on:click|self={() => ($activeSession = session)}
+              on:click|self={() => {
+                win.session = session;
+                $activeSession = session;
+              }}
             >
               {getTargetName(getTargetMostDamageTaken(session))} -
               {formatTime(session.start_damage_at, session.last_damage_at)}

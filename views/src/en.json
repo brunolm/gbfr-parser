@@ -303,7 +303,9 @@
       "4294967295": "GrenadeOverkill",
       "215": "GrenadeOverkill2"
     },
-    "a9d6569e": {},
+    "a9d6569e": {
+      "100": "Attack 1"
+    },
     "2b4aa114": {
       "100": "Attack 1",
       "101": "Attack 2",
@@ -330,7 +332,9 @@
       "1610": "Sword of Lumiel",
       "1700": "Holy Ladder"
     },
-    "bcc238de": {},
+    "bcc238de": {
+      "100": "Attack 1"
+    },
     "fba6615d": {
       "65": "Pets",
       "100": "Attack 1",
@@ -575,7 +579,11 @@
       "1600": "Umbral Eclipse",
       "1700": "Netherwrath"
     },
-    "8056abcd": {},
-    "f5755c0e": {}
+    "8056abcd": {
+      "100": "Attack 1"
+    },
+    "f5755c0e": {
+      "100": "Attack 1"
+    }
   }
 }

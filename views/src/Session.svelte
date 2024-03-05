@@ -8,6 +8,7 @@
   import SortAscending from "svelte-material-icons/SortAscending.svelte";
   import SortDescending from "svelte-material-icons/SortDescending.svelte";
   import { get } from "svelte/store";
+  import dmgcap from "./dmgcap.json";
 
   const headers: { key?: keyof ActorRecord; text: string }[] = [
     { key: "party_idx", text: "#" },
@@ -45,6 +46,20 @@
       }
       return Number(a[sortBy]) < Number(b[sortBy]) ? -1 : 1;
     });
+
+    for (const actor of session.actors) {
+      for (const action of actor.actions) {
+        const cap = dmgcap.actions[actor.character_id][action.idx];
+
+        if (Number.isNaN(cap)) {
+          continue;
+        }
+
+        if (action.max > cap) {
+          actor.cheating = true;
+        }
+      }
+    }
   }
   $: if (showCanvas && canvas && !chart) {
     const ctx = canvas.getContext("2d");
@@ -189,7 +204,9 @@
         {#if actor.party_idx >= 0 && actor.dmg > 0}
           <tr class="dmg-row">
             <td>{actor.party_idx + 1}</td>
-            <td style={`color: ${colors[actor.party_idx]}`}>{$_(`actors.allies.${actor.character_id}`)}</td>
+            <td style={`color: ${colors[actor.party_idx]}`}
+              >{$_(`actors.allies.${actor.character_id}`)}{actor.cheating ? " (CHEATING)" : ""}</td
+            >
             <td>{actor.dmg.toLocaleString()}</td>
             <td>{(actor.dps || 0).toLocaleString()}</td>
             <td>{getPrimaryTargetDamage(actor).toLocaleString()}</td>

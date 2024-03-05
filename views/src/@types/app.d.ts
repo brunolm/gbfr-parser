@@ -34,6 +34,7 @@ declare global {
   }
 
   interface ActorRecord {
+    cheating: boolean;
     player_id: number;
     character_id: string;
     party_idx: number;

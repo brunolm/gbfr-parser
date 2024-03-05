@@ -183,7 +183,10 @@
       const secondCell = trs[i].cells[1]; // Index is 0-based
       const fourthCell = trs[i].cells[3]; // Index is 0-based
 
-      columnValues.push(secondCell.textContent, fourthCell.textContent);
+      columnValues.push(
+        secondCell.textContent?.replace(/\n/g, "")?.trim(),
+        fourthCell.textContent?.replace(/\n/g, "")?.trim()
+      );
     }
 
     return columnValues.join("\n");
@@ -197,7 +200,10 @@
       const secondCell = trs[i].cells[1]; // Index is 0-based
       const fourthCell = trs[i].cells[5]; // Index is 0-based
 
-      columnValues.push(secondCell.textContent, fourthCell.textContent);
+      columnValues.push(
+        secondCell.textContent?.replace(/\n/g, "")?.trim(),
+        fourthCell.textContent?.replace(/\n/g, "")?.trim()
+      );
     }
 
     return columnValues.join("\n");

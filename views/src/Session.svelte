@@ -39,6 +39,8 @@
   let destroyed = false;
   let partyIdx = -1;
 
+  let cheatingInfo = {};
+
   $: {
     session.actors = session.actors?.sort((a, b) => {
       if (descending) {
@@ -51,6 +53,7 @@
       if (!Array.isArray(actor.actions)) {
         continue;
       }
+      cheatingInfo[actor.party_idx] = "";
       for (const action of actor.actions) {
         const cap = dmgcap.actions?.[actor.character_id]?.[action.idx];
 
@@ -59,7 +62,14 @@
         }
 
         if (action.max > cap) {
+          if (!cheatingInfo[actor.party_idx]) {
+            cheatingInfo[actor.party_idx] = "Possible cheating detected\n";
+          }
+
           actor.cheating = true;
+          cheatingInfo[actor.party_idx] +=
+            `${$_(`actors.allies.${actor.character_id}`)} -> ${$_(`actions.${actor.character_id}.${action.idx}`)} (${action.idx}) -> ` +
+            `Dmg: ${action.max.toLocaleString()} / Cap: ${cap.toLocaleString()} / Diff: ${(action.max - cap).toLocaleString()}\n`;
         }
       }
     }
@@ -210,8 +220,12 @@
           <tr class="dmg-row">
             <td>{actor.party_idx + 1}</td>
             <td style={`color: ${colors[actor.party_idx]}`}
-              >{$_(`actors.allies.${actor.character_id}`)}{actor.cheating ? " (CHEATING)" : ""}</td
-            >
+              >{$_(`actors.allies.${actor.character_id}`)}
+
+              {#if actor.cheating}
+                <span title={cheatingInfo[actor.party_idx]}>(Cheating?)</span>
+              {/if}
+            </td>
             <td>{actor.dmg.toLocaleString()}</td>
             <td>{(actor.dps || 0).toLocaleString()}</td>
             <td>{getPrimaryTargetDamage(actor).toLocaleString()}</td>

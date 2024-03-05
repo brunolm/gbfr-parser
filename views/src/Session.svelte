@@ -49,9 +49,9 @@
 
     for (const actor of session.actors) {
       for (const action of actor.actions) {
-        const cap = dmgcap.actions[actor.character_id][action.idx];
+        const cap = dmgcap.actions?.[actor.character_id]?.[action.idx];
 
-        if (Number.isNaN(cap)) {
+        if (!cap || Number.isNaN(cap)) {
           continue;
         }
 

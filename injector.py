@@ -1,22 +1,25 @@
 import ctypes
-import ctypes.util
 import ctypes.wintypes
+import ctypes.util
 import functools
 import io
 import locale
 import logging
-import msvcrt
 import os
+import tempfile
+
+import msvcrt
 import pathlib
 import pickle
 import re
 import struct
-import sys
-import tempfile
 import threading
-import time
 import traceback
 import types
+
+import time
+
+import sys
 import typing
 
 _NULL = type('NULL', (), {})
@@ -572,9 +575,7 @@ class IPatternScanner:
 
 
 try:
-    import win32event
-    import win32file
-    import win32pipe
+    import win32file, win32pipe, win32event
 except ImportError:
     has_win32 = False
 else:

@@ -1,25 +1,22 @@
 import ctypes
-import ctypes.wintypes
 import ctypes.util
+import ctypes.wintypes
 import functools
 import io
 import locale
 import logging
-import os
-import tempfile
-
 import msvcrt
+import os
 import pathlib
 import pickle
 import re
 import struct
+import sys
+import tempfile
 import threading
+import time
 import traceback
 import types
-
-import time
-
-import sys
 import typing
 
 _NULL = type('NULL', (), {})
@@ -575,7 +572,9 @@ class IPatternScanner:
 
 
 try:
-    import win32file, win32pipe, win32event
+    import win32event
+    import win32file
+    import win32pipe
 except ImportError:
     has_win32 = False
 else:
@@ -1802,11 +1801,6 @@ class Act:
             ctypes.c_uint8
         ])
 
-        self.i_a1_0x40 = ctypes.CFUNCTYPE(
-            ctypes.c_uint32,
-            ctypes.c_size_t, ctypes.c_size_t, ctypes.c_size_t, ctypes.c_size_t, ctypes.c_size_t
-        )
-
         self.p_qword_1467572B0, = scanner.find_val("48 ? ? * * * * 83 66 ? ? 48 ? ?")
 
         self.i_ui_comp_name = ctypes.CFUNCTYPE(ctypes.c_char_p, ctypes.c_size_t)
@@ -1839,12 +1833,10 @@ class Act:
             self.build_team_map()
             target = size_t_from(size_t_from(a1 + 8))
             source = size_t_from(size_t_from(a2 + 0x18) + 0x70)
-            flag = not (a4 or self.i_a1_0x40(v_func(a1, 0x40))(a1, a2, 0, target, source))
         except:
             logging.error('on_process_damage_evt', exc_info=True)
-            flag = True
-        res = hook.original(a1, a2, a3, a4)
-        if flag: return res
+        res = hook.original(a1, a2, a3, a4) # return 0 if it is non processed damage event
+        if not (res and target and source): return res # or if get target or source failed
         try:
             dmg = i32_from(a2 + 0xd0)
             flags_ = u64_from(a2 + 0xd8)

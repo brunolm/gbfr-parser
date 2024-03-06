@@ -1861,7 +1861,7 @@ class Act:
             dmg = i32_from(a2)
             target = size_t_from(size_t_from(a1 + 0x18) + 0x70)
             source = size_t_from(size_t_from(a1 + 0x30) + 0x70)
-            self._on_damage(source, target, dmg, 0, -0x100)
+            self._on_damage(source, target, dmg, 0, -0x100, 0, -1, 0)
         except:
             logging.error('on_process_dot_evt', exc_info=True)
         return res

@@ -262,6 +262,20 @@
           <th></th>
           <th>{session.total_dmg.toLocaleString()}</th>
           <th>{(session.total_dps || 0).toLocaleString()}</th>
+          <th
+            >{session.actors
+              .reduce((a, b) => {
+                return a + getPrimaryTargetDamage(b);
+              }, 0)
+              .toLocaleString()}</th
+          >
+          <th
+            >{session.actors
+              .reduce((a, b) => {
+                return a + getPrimaryTargetDps(b);
+              }, 0)
+              .toLocaleString()}</th
+          >
         </tr>
       </tfoot>
     {/if}

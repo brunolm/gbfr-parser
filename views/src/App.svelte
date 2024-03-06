@@ -285,6 +285,34 @@
     downloadAnchorElem.remove();
   }
 
+  async function loadFromFile() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
+    input.onchange = async () => {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = async e => {
+          const content = e.target?.result;
+          if (typeof content === "string") {
+            try {
+              const data = JSON.parse(content);
+              if (Array.isArray(data)) {
+                $sessions = data;
+                $activeSession = $sessions[$sessions.length - 1];
+                saveSessions();
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          }
+        };
+        reader.readAsText(input.files[0]);
+      }
+    };
+    input.click();
+  }
+
   async function clearAll() {
     if (confirm("Are you sure you want to clear all data?")) {
       $sessions = [];
@@ -450,6 +478,7 @@
 
           <div class="buttons-container">
             <button id="saveAll" on:click={saveAll} class="button button-sm">Save All</button>
+            <button id="loadAll" on:click={loadFromFile} class="button button-sm">Load file</button>
             <button id="clearAll" on:click={clearAll} class="button button-sm">Clear all</button>
           </div>
 

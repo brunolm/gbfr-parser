@@ -81,12 +81,15 @@ b
   padding: 2rem
   flex-direction: column
 
+.main-container
+  min-width: 40rem
+  max-width: 90rem
+  width: 100%
+  margin: auto
+
 #main
   background-color: $fg
   margin: auto
-  width: 100%
-  min-width: 40rem
-  max-width: 90rem
 
 $header-height: 3.2rem
 header
@@ -229,10 +232,17 @@ canvas
     margin: auto
 
 .button
-  border: 1px solid gray
-  padding: 2em
-  border-radius: 2em
-  margin-bottom: 2em
+  border: 1px solid green
+  padding: 1em
+  border-radius: 0.5em
+  margin-bottom: 1em
+  background-color: transparent
+  color: white
+  transition: background-color 0.3s ease
+
+  &:hover
+    background-color: darkgreen
+    color: white
 
 .button-sm
   padding: 1rem
@@ -243,6 +253,11 @@ canvas
 .container
   align-items: flex-start
   gap: 1em
+
+.buttons-container
+  width: 100%
+  max-width: 90rem
+  text-align: right
 
 .vertical-tabs
   display: flex

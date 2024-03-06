@@ -216,7 +216,17 @@
     const duration = (document.querySelector(".active").textContent ?? "[0m]").match(/\[[\S\s]+\]/)?.[0];
 
     await navigator.clipboard.writeText(`${duration} \n${valuesStr.split("\n").join(" \n")}`);
-    copyStatus = "Copied!";
+    copyStatus = "Copied: chat dps";
+  }
+
+  async function captureChatPdps() {
+    copyStatus = "Copying...";
+    const valuesStr = await getTableColumnValuesPdps();
+
+    const duration = (document.querySelector(".active").textContent ?? "[0m]").match(/\[[\S\s]+\]/)?.[0];
+
+    await navigator.clipboard.writeText(`${duration} \n${valuesStr.split("\n").join(" \n")}`);
+    copyStatus = "Copied: chat pdps";
   }
 
   async function captureTab() {
@@ -228,7 +238,7 @@
 
     await navigator.clipboard.writeText(tabValues);
 
-    copyStatus = "Copied!";
+    copyStatus = "Copied: tab dps";
   }
 
   async function captureTabPdps() {
@@ -240,7 +250,7 @@
 
     await navigator.clipboard.writeText(tabValues);
 
-    copyStatus = "Copied!";
+    copyStatus = "Copied: tab pdps";
   }
 
   async function capture() {
@@ -261,7 +271,7 @@
       copyStatus = err;
     }
 
-    copyStatus = "Copied!";
+    copyStatus = "Copied: image";
   }
 
   async function saveAll() {
@@ -410,29 +420,48 @@
         {/each}
       </div>
 
-      <div id="main" bind:this={mainDiv}>
-        <main>
-          {#each $sessions as session (session.start_at)}
-            {#if $activeSession === session}
-              {#key session.start_at}
-                <Session bind:session />
-              {/key}
-            {/if}
-          {/each}
-        </main>
-      </div>
-    </div>
-    <div>
-      <p style="text-align: center">{copyStatus}</p>
-      <button id="capture" on:click={capture} class="button">Copy Image</button>
-      <button id="capture1" on:click={captureTab} class="button">Copy Tab</button>
-      <button id="capture1" on:click={captureTabPdps} class="button">Copy Tab PDPS</button>
-      <button id="capture2" on:click={captureChat} class="button">Copy chat</button>
-    </div>
+      <div class="main-container">
+        <div id="main" bind:this={mainDiv}>
+          <main>
+            {#each $sessions as session (session.start_at)}
+              {#if $activeSession === session}
+                {#key session.start_at}
+                  <Session bind:session />
+                {/key}
+              {/if}
+            {/each}
+          </main>
+        </div>
 
-    <div>
-      <button id="saveAll" on:click={saveAll} class="button button-sm">Save All</button>
-      <button id="clearAll" on:click={clearAll} class="button button-sm">Clear all</button>
+        <div class="buttons-container">
+          <div>
+            <p style="text-align: center">
+              {#if copyStatus}
+                {copyStatus}
+              {/if}
+              {#if !copyStatus}
+                &nbsp;
+              {/if}
+            </p>
+            <button id="capture" on:click={capture} class="button">Copy Image</button>
+            <button id="capturechatdps" on:click={captureChat} class="button">Copy chat dps</button>
+            <button id="capturechatpdps" on:click={captureChatPdps} class="button">Copy chat pdps</button>
+          </div>
+
+          <div class="buttons-container">
+            <button id="saveAll" on:click={saveAll} class="button button-sm">Save All</button>
+            <button id="clearAll" on:click={clearAll} class="button button-sm">Clear all</button>
+          </div>
+
+          <div class="buttons-container">
+            <details>
+              <summary>Spreadsheet commands</summary>
+              <button id="capturetabdps" on:click={captureTab} class="button">Copy Tab</button>
+              <button id="capturetabpdps" on:click={captureTabPdps} class="button">Copy Tab PDPS</button>
+            </details>
+          </div>
+        </div>
+      </div>
     </div>
   {:else}
     <i>Waiting for battle events... </i>

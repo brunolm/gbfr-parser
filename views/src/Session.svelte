@@ -180,6 +180,10 @@
   <div style="text-align: center; padding: 1em;">
     <h2>
       {getTargetName(maxDmgCharacterId)} [{formatDuration(session.start_damage_at, session.last_damage_at)}]
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <span style="float: right; cursor: pointer" on:click={() => (partyIdx = partyIdx === -100 ? -1 : -100)}>
+        expand/collapse all
+      </span>
     </h2>
   </div>
   <table>
@@ -245,7 +249,7 @@
               </button>
             </td>
           </tr>
-          {#if partyIdx === actor.party_idx}
+          {#if partyIdx === actor.party_idx || partyIdx === -100}
             <tr>
               <td colspan="100">
                 <Breakdown {actor} />

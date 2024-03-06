@@ -1,20 +1,21 @@
-import base64
-import codecs
-import errno
 import hashlib
+import base64
 import json
 import os
 import socket
-import ssl
 import struct
+import ssl
 import sys
 import threading
 import time
 import traceback
+
+import errno
+import codecs
 from collections import deque
-from http.server import BaseHTTPRequestHandler  # pylint: disable=import-error
-from io import BytesIO, StringIO
 from select import select
+from http.server import BaseHTTPRequestHandler  # pylint: disable=import-error
+from io import StringIO, BytesIO
 
 unicode = str  # pylint: disable=redefined-builtin
 
@@ -713,7 +714,7 @@ if __name__ == '__main__':
     if _current_dir not in sys.path:
         sys.path.insert(0, _current_dir)
 
-from injector import Act, Process, enable_privilege, run_admin
+from injector import Act, Process, run_admin, enable_privilege
 
 
 class ActWs(Act):
@@ -783,4 +784,5 @@ if __name__ == '__main__':
         main()
     except:
         traceback.print_exc()
+    finally:
         os.system('pause')

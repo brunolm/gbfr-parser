@@ -122,7 +122,7 @@ export const getTarget = (actor: ActorRecord, data: ActorData) => {
 export const getAction = (actor: ActorRecord, idx: number) => {
   let action = actor.actions?.find(e => e.idx === idx);
   if (!action) {
-    action = { idx, hit: 0, dmg: 0, min: -1, max: -1 };
+    action = { idx, hit: 0, dmg: 0, min: -1, max: -1, cap: 0, capWar: 0 };
     if (!actor.actions) actor.actions = [];
     actor.actions.push(action);
   }

@@ -18,3 +18,7 @@ After obtaining latest [release](https://github.com/brunolm/gbfr-parser/releases
 
 - Launch [`uac_start.cmd`](./uac_start.cmd)
 - Open `index.html` from release page, or build directory
+
+## Contributing
+
+If you want to make your own changes you can find the instructions here: [CONTRIBUTING.md](./CONTRIBUTING.md)

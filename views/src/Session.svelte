@@ -49,27 +49,29 @@
       return Number(a[sortBy]) < Number(b[sortBy]) ? -1 : 1;
     });
 
-    for (const actor of session.actors) {
-      if (!Array.isArray(actor.actions)) {
-        continue;
-      }
-      cheatingInfo[actor.party_idx] = "";
-      for (const action of actor.actions) {
-        const cap = dmgcap.actions?.[actor.character_id]?.[action.idx];
-
-        if (!cap || Number.isNaN(cap)) {
+    if (Array.isArray(session.actors)) {
+      for (const actor of session.actors) {
+        if (!Array.isArray(actor.actions)) {
           continue;
         }
+        cheatingInfo[actor.party_idx] = "";
+        for (const action of actor.actions) {
+          const cap = dmgcap.actions?.[actor.character_id]?.[action.idx];
 
-        if (action.max > cap) {
-          if (!cheatingInfo[actor.party_idx]) {
-            cheatingInfo[actor.party_idx] = "Possible cheating detected\n";
+          if (!cap || Number.isNaN(cap)) {
+            continue;
           }
 
-          actor.cheating = true;
-          cheatingInfo[actor.party_idx] +=
-            `${$_(`actors.allies.${actor.character_id}`)} -> ${$_(`actions.${actor.character_id}.${action.idx}`)} (${action.idx}) -> ` +
-            `Dmg: ${action.max.toLocaleString()} / Cap: ${cap.toLocaleString()} / Diff: ${(action.max - cap).toLocaleString()}\n`;
+          if (action.max > cap) {
+            if (!cheatingInfo[actor.party_idx]) {
+              cheatingInfo[actor.party_idx] = "Possible cheating detected\n";
+            }
+
+            actor.cheating = true;
+            cheatingInfo[actor.party_idx] +=
+              `${$_(`actors.allies.${actor.character_id}`)} -> ${$_(`actions.${actor.character_id}.${action.idx}`)} (${action.idx}) -> ` +
+              `Dmg: ${action.max.toLocaleString()} / Cap: ${cap.toLocaleString()} / Diff: ${(action.max - cap).toLocaleString()}\n`;
+          }
         }
       }
     }
@@ -142,20 +144,22 @@
   $: {
     let dmgSums: any = {};
 
-    for (let actor of session.actors!) {
-      actor.pdmg = getPrimaryTargetDamage(actor);
-      actor.pdps = getPrimaryTargetDps(actor);
-      if (actor?.targets && Array.isArray(actor?.targets)) {
-        for (let target of actor?.targets!) {
-          if (!dmgSums[target.character_id]) {
-            dmgSums[target.character_id] = 0;
+    if (Array.isArray(session.actors)) {
+      for (let actor of session.actors!) {
+        actor.pdmg = getPrimaryTargetDamage(actor);
+        actor.pdps = getPrimaryTargetDps(actor);
+        if (actor?.targets && Array.isArray(actor?.targets)) {
+          for (let target of actor?.targets!) {
+            if (!dmgSums[target.character_id]) {
+              dmgSums[target.character_id] = 0;
+            }
+            dmgSums[target.character_id] += target.dmg;
           }
-          dmgSums[target.character_id] += target.dmg;
         }
       }
-    }
 
-    maxDmgCharacterId = Object.keys(dmgSums).reduce((a, b) => (dmgSums[a] > dmgSums[b] ? a : b));
+      maxDmgCharacterId = Object.keys(dmgSums).reduce((a, b) => (dmgSums[a] > dmgSums[b] ? a : b), 0);
+    }
   }
 
   const getPrimaryTargetDamage = (actor: ActorRecord) => {

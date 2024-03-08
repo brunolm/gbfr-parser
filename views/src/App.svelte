@@ -299,8 +299,10 @@
               const data = JSON.parse(content);
               if (Array.isArray(data)) {
                 $sessions = data;
-                $activeSession = $sessions[$sessions.length - 1];
                 saveSessions();
+                $activeSession = $sessions[$sessions.length - 1];
+
+                window.location.reload();
               }
             } catch (e) {
               console.error(e);
@@ -493,7 +495,10 @@
       </div>
     </div>
   {:else}
-    <i>Waiting for battle events... </i>
+    <p>
+      <i>Waiting for battle events... </i>
+      <button id="loadAll2" on:click={loadFromFile} class="button button-sm">Load file</button>
+    </p>
   {/if}
 {:else}
   <i>Establishing connection to WebSocket...</i>

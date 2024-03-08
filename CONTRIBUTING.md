@@ -6,7 +6,6 @@
 git clone git@github.com:brunolm/gbfr-parser.git
 cd views
 yarn
-
 ```
 
 ## Run in dev mode

@@ -128,7 +128,8 @@
       "-3": "Supplemental Damage",
       "-256": "Damage Over Time (DoT)",
       "5000": "Ether Round",
-      "5010": "Charged Shot"
+      "5010": "Charged Shot",
+      "4294967295": "Some Overkill(?)"
     },
     "9498420d": {
       "100": "Attack 1",
@@ -404,12 +405,20 @@
       "302": "Aerial Attack 3",
       "400": "Launch",
       "410": "Aerial Barrage",
+      "-700": "???",
 
       "1000": "Purge Spirits",
       "1100": "Blaues Gespenst",
+      "1200": "Sic' Em, Geegee!",
       "1210": "Sic' Em, Geegee!",
+      "1320": "Benediction (Pet ATK 1)",
+      "1330": "Benediction (Pet ATK 2)",
+      "1340": "Benediction (Pet ATK 3)",
       "1400": "Pendel",
       "1500": "Strafe",
+      "1620": "Hinrichten",
+      "1630": "Hinrichten",
+      "1640": "Hinrichten",
       "1700": "Umlauf"
     },
     "601aa977": {
@@ -674,6 +683,7 @@
       "508": "Power Strike 5",
       "509": "Power Strike 6",
       "510": "Power Strike 7",
+      "515": "Power Strike 8(?)",
 
       "0": "Light Blast (Enter Dragonform)",
       "1000": "Regliniv Recidiv (Dragonform)",
@@ -727,6 +737,7 @@
       "508": "Power Strike 5",
       "509": "Power Strike 6",
       "510": "Power Strike 7",
+      "515": "Power Strike 8(?)",
 
       "0": "Light Blast (Enter Dragonform)",
       "1000": "Regliniv Recidiv (Dragonform)",

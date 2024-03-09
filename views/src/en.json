@@ -132,6 +132,8 @@
       "4294967295": "Some Overkill(?)"
     },
     "9498420d": {
+      "_name": "Djeeta",
+
       "100": "Attack 1",
       "110": "Attack 2",
       "120": "Attack 3",
@@ -140,6 +142,8 @@
       "201": "Power Raise 2 (XYYY)",
       "202": "Power Raise 3 (XXYYY)",
       "203": "Power Raise 4 (XXXYYY)",
+      "204": "Power Raise Finisher",
+      "205": "Power Raise Link Finisher",
       "210": "Power Strike 1 (XY)",
       "220": "Power Strike 2 (XXY)",
       "230": "Power Strike 3 (XXXY)",
@@ -178,6 +182,8 @@
       "2413": "Dispel (Arts IV)"
     },
     "c3155079": {
+      "_name": "Zeta",
+
       "100": "Attack 1",
       "101": "Attack 2",
       "102": "Attack 3",
@@ -203,6 +209,8 @@
       "1703": "Realm's Majesty Counter 2"
     },
     "34d4fd8f": {
+      "_name": "Katalina",
+
       "100": "Attack 1 (X)",
       "101": "Attack 2 (XX)",
       "102": "Attack 3 (XXX)",
@@ -241,6 +249,8 @@
       "7": "Frost Blade"
     },
     "f8d73d33": {
+      "_name": "Rackam",
+
       "1": "Spitfire",
       "2": "Bullet Hail",
       "5": "Coffinmaker",
@@ -257,6 +267,8 @@
       "410": "Aerial Barrage"
     },
     "7b5934ad": {
+      "_name": "Io",
+
       "100": "Attack 1",
       "110": "Attack 2",
       "120": "Attack 3",
@@ -283,6 +295,8 @@
       "8203": "Lightning (Mystic Vortex 3)"
     },
     "443d46bb": {
+      "_name": "Eugen",
+
       "1": "Sumrak",
       "2": "Detonator",
       "3": "Intercept",
@@ -305,6 +319,8 @@
       "215": "GrenadeOverkill2"
     },
     "a9d6569e": {
+      "_name": "Rosetta",
+
       "100": "Attack 1",
       "101": "Attack 2",
       "102": "Attack 3",
@@ -328,6 +344,8 @@
       "6": "Lost Love"
     },
     "2b4aa114": {
+      "_name": "Charlotta",
+
       "100": "Attack 1",
       "101": "Attack 2",
       "102": "Attack 3",
@@ -354,6 +372,8 @@
       "1700": "Holy Ladder"
     },
     "bcc238de": {
+      "_name": "Ghandagoza",
+
       "100": "Attack 1",
       "101": "Attack 2",
       "102": "Attack 3",
@@ -387,6 +407,8 @@
       "1500": "Infernal Stomp"
     },
     "fba6615d": {
+      "_name": "Ferry",
+
       "65": "Pets",
       "100": "Attack 1",
       "102": "Attack 1 (Chained after A-3 hold)",
@@ -422,6 +444,8 @@
       "1700": "Umlauf"
     },
     "601aa977": {
+      "_name": "Narmaya",
+
       "100": "Attack 1 (Freeflutter/Blue)",
       "101": "Attack 2 (Freeflutter/Blue)",
       "102": "Attack 3 (Freeflutter/Blue)",
@@ -463,6 +487,8 @@
       "1005": "Transient (Dawnfly/Pink)"
     },
     "63a7c3f0": {
+      "_name": "Lancelot",
+
       "100": "Attack 1",
       "101": "Attack 2",
       "102": "Attack 3",
@@ -487,6 +513,8 @@
       "1500": "Southern Cross"
     },
     "f96a90c2": {
+      "_name": "Vane",
+
       "100": "Attack 1",
       "101": "Attack 2",
       "102": "Attack 3",
@@ -512,6 +540,8 @@
       "1600": "Energy Destruction"
     },
     "28ac1108": {
+      "_name": "Percival",
+
       "1": "Feuerangriff",
       "4": "Zerreissen",
       "6": "Macht",
@@ -530,6 +560,8 @@
       "410": "Aerial Barrage"
     },
     "94e2514e": {
+      "_name": "Siegfried",
+
       "100": "Attack 1",
       "101": "Attack 2",
       "102": "Attack 3",
@@ -557,6 +589,8 @@
       "1600": "Vendrängen"
     },
     "6fdd6932": {
+      "_name": "Cagliostro",
+
       "100": "Attack 1",
       "101": "Attack 2",
       "102": "Attack 3",
@@ -590,6 +624,8 @@
       "1800": "Pain Train"
     },
     "c97f3365": {
+      "_name": "Yodarha",
+
       "1": "Awakening",
       "2": "Empty Mist",
       "5": "Tit for Tat",
@@ -620,6 +656,8 @@
       "410": "Aerial Barrage"
     },
     "d16cfbde": {
+      "_name": "Vaseraga",
+
       "100": "Attack 1 (X)",
       "110": "Attack 2 (XX)",
       "120": "Attack 3 (XXX/XYXX)",
@@ -649,6 +687,8 @@
       "1700": "Netherwrath"
     },
     "8056abcd": {
+      "_name": "Id",
+
       "1": "Regliniv Recidiv",
       "2": "Unbound",
       "3": "Atonement",
@@ -703,6 +743,8 @@
       "900": "Transformation"
     },
     "f5755c0e": {
+      "_name": "Id Dragon",
+
       "1": "Regliniv Recidiv",
       "2": "Unbound",
       "3": "Atonement",

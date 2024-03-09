@@ -51,6 +51,7 @@
 
     if (Array.isArray(session.actors)) {
       for (const actor of session.actors) {
+        actor.cheating = false;
         if (!Array.isArray(actor.actions)) {
           continue;
         }
@@ -185,6 +186,7 @@
     <h2>
       {getTargetName(maxDmgCharacterId)} [{formatDuration(session.start_damage_at, session.last_damage_at)}]
       <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
       <span style="float: right; cursor: pointer" on:click={() => (partyIdx = partyIdx === -100 ? -1 : -100)}>
         expand/collapse all
       </span>

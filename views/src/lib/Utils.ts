@@ -36,6 +36,8 @@ export const saveSessions = async () => {
   });
 
   await idb.set("sessions", clones);
+
+  return clones;
 };
 
 export const createSession = (time: number) => {

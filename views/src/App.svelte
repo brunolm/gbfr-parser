@@ -299,10 +299,9 @@
               const data = JSON.parse(content);
               if (Array.isArray(data)) {
                 $sessions = data;
-                saveSessions();
-                $activeSession = $sessions[$sessions.length - 1];
+                $sessions = await saveSessions();
 
-                window.location.reload();
+                $activeSession = $sessions[$sessions.length - 1];
               }
             } catch (e) {
               console.error(e);

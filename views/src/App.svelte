@@ -148,7 +148,8 @@
       Yodarha: "",
       Zeta: "",
       Clone1: "",
-      Clone2: ""
+      Clone2: "",
+      Clone3: ""
     } as any;
     const lines = s.split("\n");
     for (let i = 0; i < lines.length; i += 2) {
@@ -166,6 +167,8 @@
           obj["Clone1"] = value;
         } else if (obj["Clone2"] === "") {
           obj["Clone2"] = value;
+        } else if (obj["Clone3"] === "") {
+          obj["Clone3"] = value;
         }
       }
     }

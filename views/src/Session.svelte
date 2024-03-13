@@ -29,8 +29,8 @@
 
   export let session: Session;
 
-  let sortBy: keyof ActorRecord = "dmg";
-  let descending = true;
+  let sortBy: keyof ActorRecord = localStorage.sortBy ?? "dmg";
+  let descending = localStorage.sortByDescending === "false" ? false : true;
 
   let chart: Chart | undefined;
   let canvas: HTMLCanvasElement;
@@ -211,8 +211,12 @@
             data-active={sortBy === header.key || undefined}
             on:click={header.key
               ? () => {
-                  if (header.key) sortBy = header.key;
+                  if (header.key) {
+                    sortBy = header.key;
+                    localStorage.sortBy = sortBy;
+                  }
                   descending = !descending;
+                  localStorage.sortByDescending = descending;
                 }
               : undefined}
           >

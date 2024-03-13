@@ -163,6 +163,23 @@
     }
   }
 
+  const getTargetsDamage = (actor: ActorRecord) => {
+    if (!actor?.targets) {
+      return 0;
+    }
+
+    return actor.targets.map(t => t.dmg).reduce((a, b) => a + b, 0);
+  };
+  const getTargetsDps = (actor: ActorRecord) => {
+    if (!actor?.targets) {
+      return 0;
+    }
+
+    const totalDurationInSeconds = (session.last_damage_at - session.start_damage_at) / 1000;
+
+    return Math.floor(getTargetsDamage(actor) / totalDurationInSeconds);
+  };
+
   const getPrimaryTargetDamage = (actor: ActorRecord) => {
     if (!actor?.targets) {
       return 0;
@@ -241,7 +258,7 @@
               {/if}
             </td>
             <td>{actor.dmg.toLocaleString()}</td>
-            <td>{(actor.dps || 0).toLocaleString()}</td>
+            <td>{(actor.dps || getTargetsDps(actor) || 0).toLocaleString()}</td>
             <td>{getPrimaryTargetDamage(actor).toLocaleString()}</td>
             <td>{getPrimaryTargetDps(actor).toLocaleString()}</td>
             <td>{(Number(actor.percentage || 0) * 100).toLocaleString(undefined, { maximumFractionDigits: 1 })}%</td>

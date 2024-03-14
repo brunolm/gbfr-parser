@@ -29,6 +29,14 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ inputs.tag }}
+          file: views/gbfr-parser.${{ inputs.tag }}.zip
+          asset_name: gbfr-parser.${{ inputs.tag }}.zip
+          overwrite: true
+
+      - uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ inputs.tag }}
           file: views/gbfr-parser.${{ inputs.tag }}.zip.rename
           asset_name: gbfr-parser.${{ inputs.tag }}.zip.rename
           overwrite: true

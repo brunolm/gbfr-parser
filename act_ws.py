@@ -723,7 +723,7 @@ class ActWs(Act):
         self.ws_server = WebSocketServer('', 24399, BroadcastHandler)
         self.ws_thread = threading.Thread(target=self.ws_server.serve_forever)
 
-    def on_damage(self, source, target, damage, flags, action_id):
+    def on_damage(self, source, target, damage, flags, action_id, dmg_cap=0):
         BroadcastHandler.broadcast({
             'time_ms': int(time.time() * 1000),
             'type': 'damage',
@@ -733,9 +733,7 @@ class ActWs(Act):
                 'action_id': action_id,
                 'damage': damage,
                 'flags': flags,
-                'critical': 0,
-                'dmgCap': 0,
-                'attackRate': 0
+                'dmgCap': dmg_cap
             }
         })
 

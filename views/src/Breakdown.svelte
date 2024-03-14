@@ -107,7 +107,7 @@
     {#if actor.actions?.length}
       {#each actor.actions || [] as action}
         <tr>
-          <td>{getActionName(actor.character_id, action.idx)}</td>
+          <td>{action.idx} {getActionName(actor.character_id, action.idx)}</td>
           <td>{action.hit.toLocaleString()}</td>
           <td>{action.dmg.toLocaleString()}</td>
           <td>{action.min.toLocaleString()}</td>
@@ -124,12 +124,7 @@
     <table>
       <colgroup>
         <col span="1" />
-        <col span="1" />
-        <col span="1" />
-        <col span="1" />
-        <col span="1" />
-        <col span="1" />
-        <col span="1" />
+        <col width="250" />
       </colgroup>
       <thead>
         <tr>
@@ -151,11 +146,6 @@
               {header.text}
             </th>
           {/each}
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -163,7 +153,6 @@
           <tr>
             <td>{$_(`actors.enemies.${target.character_id}`)}</td>
             <td>{target.dmg.toLocaleString()}</td>
-            <td></td>
           </tr>
         {/each}
       </tbody>

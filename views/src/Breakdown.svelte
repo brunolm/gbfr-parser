@@ -107,7 +107,11 @@
     {#if actor.actions?.length}
       {#each actor.actions || [] as action}
         <tr>
-          <td>{action.idx} {getActionName(actor.character_id, action.idx)}</td>
+          <td>
+            <span title={action.idx}>
+              {getActionName(actor.character_id, action.idx)}
+            </span>
+          </td>
           <td>{action.hit.toLocaleString()}</td>
           <td>{action.dmg.toLocaleString()}</td>
           <td>{action.min.toLocaleString()}</td>

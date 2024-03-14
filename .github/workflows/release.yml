@@ -20,7 +20,7 @@ jobs:
 
           cp -t build ../act_ws.py ../EasyHook64.dll ../injector.py ../uac_start.cmd ../steam_win_start.cmd
           mv build gbfr-parser.${{ inputs.tag }}
-          zip -r gbfr-parser.${{ inputs.tag }}.zip gbfr-parser.${{ inputs.tag }}
+          zip -r gbfr-parser.${{ inputs.tag }}.zip.rename gbfr-parser.${{ inputs.tag }}
 
       - run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 

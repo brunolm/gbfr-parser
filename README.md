@@ -16,6 +16,8 @@ Pre-requirements:
 
 After obtaining latest [release](https://github.com/brunolm/gbfr-parser/releases), follow the instruction below
 
+- Rename from `.zip.rename` to `.zip`
+- Extract files to a folder
 - Launch [`uac_start.cmd`](./uac_start.cmd)
 - Open `index.html` from release page, or build directory
 

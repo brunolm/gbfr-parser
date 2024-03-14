@@ -37,7 +37,7 @@
 
   let showCanvas = true;
   let destroyed = false;
-  let partyIdx = 0; // -1;
+  let partyIdx = -1;
 
   let cheatingInfo = {};
 

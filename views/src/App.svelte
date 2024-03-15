@@ -431,7 +431,13 @@
               }}
             >
               {getTargetName(getTargetMostDamageTaken(session))}
-              <span style="font-size: 12px">
+              <span
+                style="font-size: 12px"
+                on:click|self={() => {
+                  win.session = session;
+                  $activeSession = session;
+                }}
+              >
                 {formatTime(session.start_damage_at, session.last_damage_at)}
               </span>
               <!-- svelte-ignore a11y-no-static-element-interactions -->

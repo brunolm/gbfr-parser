@@ -40,7 +40,7 @@
 
   let showCanvas = localStorage.rememberShowCanvas ? localStorage.rememberShowCanvas === "true" : false;
   let destroyed = false;
-  let partyIdx = -1;
+  let partyIdx = localStorage.rememberPartyIdx ? Number(localStorage.rememberPartyIdx) : -1;
 
   let cheatingInfo = {};
 
@@ -294,7 +294,13 @@
               <button
                 type="button"
                 style="width: 100%"
-                on:click={() => (partyIdx = partyIdx === actor.party_idx ? -1 : actor.party_idx)}
+                on:click={() => {
+                  partyIdx = partyIdx === actor.party_idx ? -1 : actor.party_idx;
+
+                  if (partyIdx === -1 || partyIdx === 0) {
+                    localStorage.rememberPartyIdx = partyIdx;
+                  }
+                }}
               >
                 {#if partyIdx === actor.party_idx}
                   <ChevronUp size="2.5rem" />

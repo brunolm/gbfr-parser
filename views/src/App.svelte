@@ -430,20 +430,16 @@
                 $activeSession = session;
               }}
             >
-              {getTargetName(getTargetMostDamageTaken(session))} -
-              {formatTime(session.start_damage_at, session.last_damage_at)}
+              {getTargetName(getTargetMostDamageTaken(session))}
+              <span style="font-size: 12px">
+                {formatTime(session.start_damage_at, session.last_damage_at)}
+              </span>
               <!-- svelte-ignore a11y-no-static-element-interactions -->
               <!-- svelte-ignore a11y-click-events-have-key-events -->
               <span
                 class="remove-session"
                 on:click={() => {
                   removeSession(session);
-                  if (swiper) {
-                    window.requestAnimationFrame(() => swiper.update());
-                    if ($activeSession === session) {
-                      window.requestAnimationFrame(() => swiper.slideTo($sessions.indexOf($activeSession)));
-                    }
-                  }
                 }}
               >
                 <Close size="1.6rem" />

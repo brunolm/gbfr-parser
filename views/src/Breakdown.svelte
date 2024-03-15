@@ -37,7 +37,9 @@
   export let party: PartyMember[];
 
   let win = window as any;
-  let activeTab: "sigils" | "damage" = "sigils";
+
+  let showSigils = true;
+  let showDamage = true;
 
   let targetSortBy: keyof ActorRecord = "dmg";
   let targetDescending = true;
@@ -87,22 +89,22 @@
   };
 
   const translate = (containerKey, key) => {
-    return en.game[containerKey][key.toString(16).toUpperCase()];
+    return en.game[containerKey][key.toString(16).toUpperCase()] ?? "";
   };
 </script>
 
 <div class="flex" style="justify-content: flex-end">
   <button
-    style={`padding: 0.25em 1em; border: 1px solid green;${activeTab === "sigils" ? "background-color: green" : ""}`}
-    on:click={() => (activeTab = "sigils")}>Sigils</button
+    style={`padding: 0.25em 1em; border: 1px solid green;${showSigils ? "background-color: green" : ""}`}
+    on:click={() => (showSigils = !showSigils)}>Sigils</button
   >
   <button
-    style={`padding: 0.25em 1em; border: 1px solid green;${activeTab === "damage" ? "background-color: green" : ""}`}
-    on:click={() => (activeTab = "damage")}>Damage</button
+    style={`padding: 0.25em 1em; border: 1px solid green;${showDamage ? "background-color: green" : ""}`}
+    on:click={() => (showDamage = !showDamage)}>Damage</button
   >
 </div>
 
-<div id="breakdown-tab-sigils" style={activeTab === "sigils" ? "display:block" : "display: none"}>
+<div id="breakdown-tab-sigils" style={showSigils ? "display:block" : "display: none"}>
   {#if party?.length > actor.party_idx}
     <span>
       {en.game.weapons[party[actor.party_idx]?.weapon?.weapon_id.toString(16).toUpperCase()]}
@@ -172,7 +174,7 @@
   </table>
 </div>
 
-<div id="breakdown-tab-damage" style={activeTab === "damage" ? "display:block" : "display: none"}>
+<div id="breakdown-tab-damage" style={showDamage ? "display:block" : "display: none"}>
   <table>
     <colgroup>
       <col span="1" />

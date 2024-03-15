@@ -5,19 +5,21 @@ import functools
 import io
 import locale
 import logging
-import msvcrt
 import os
 import pathlib
 import pickle
 import re
 import struct
-import sys
 import tempfile
 import threading
 import time
 import traceback
 import types
 import typing
+
+import msvcrt
+import sys
+import time
 
 _NULL = type('NULL', (), {})
 _T = typing.TypeVar('_T')
@@ -1742,6 +1744,7 @@ i32_from = Process.current.read_i32  # lambda a: ctypes.c_int32.from_address(a).
 u32_from = Process.current.read_u32  # lambda a: ctypes.c_uint32.from_address(a).value
 u64_from = Process.current.read_u64  # lambda a: ctypes.c_uint64.from_address(a).value
 float_from = Process.current.read_float
+string_from = Process.current.read_bytes_zero_trim
 v_func = lambda a, off: size_t_from(size_t_from(a) + off)
 
 
@@ -1763,6 +1766,44 @@ class Actor:
     _get_base_name = VFunc(ctypes.CFUNCTYPE(ctypes.c_size_t, ctypes.c_size_t, ctypes.c_size_t), 0x48)
     _get_type_name = VFunc(ctypes.CFUNCTYPE(ctypes.c_size_t, ctypes.c_size_t, ctypes.c_size_t), 0x50)
     _get_type_id = VFunc(ctypes.CFUNCTYPE(ctypes.c_size_t, ctypes.c_size_t, ctypes.c_size_t), 0x58)
+
+    class Weapon(ctypes.Structure):  # size = 0x98
+        _fields_ = [
+            ('unk1', ctypes.c_uint32),
+            ('weapon', ctypes.c_uint32),
+            ('weapon_ap_tree', ctypes.c_uint32),
+            ('unk2', ctypes.c_uint32),
+            ('exp', ctypes.c_uint32),
+            ('unk3', ctypes.c_uint32),
+            ('unk4', ctypes.c_uint32),
+            ('enhance_lv', ctypes.c_uint32),  # ?
+            ('skill1', ctypes.c_uint32),
+            ('skill1_lv', ctypes.c_uint32),
+            ('skill2', ctypes.c_uint32),
+            ('skill2_lv', ctypes.c_uint32),
+            ('skill3', ctypes.c_uint32),
+            ('skill3_lv', ctypes.c_uint32),
+            ('bless_item', ctypes.c_uint32),
+            # more unknown...
+        ]
+
+    class Sigil(ctypes.Structure):
+        _fields_ = [
+            ('first_trait_id', ctypes.c_uint32),
+            ('first_trait_level', ctypes.c_uint32),
+            ('second_trait_id', ctypes.c_uint32),
+            ('second_trait_level', ctypes.c_uint32),
+            ('sigil_id', ctypes.c_uint32),
+            ('equipped_character', ctypes.c_uint32),
+            ('sigil_level', ctypes.c_uint32),
+            ('acquisition_count', ctypes.c_uint32),
+            ('notification_enum', ctypes.c_uint32),
+        ]
+
+    class Offsets:
+        p_data_off = 0
+        p_data_weapon_off = 0
+        p_data_sigil_off = 0
 
     def __str__(self):
         return f"{self.type_name}#{self.address:x}"
@@ -1800,11 +1841,75 @@ class Actor:
             case 0xc9f45042:  # 老男人武器 # Wp1890
                 return Actor(size_t_from(size_t_from(self.address + 0x578) + 0x70))
             case 0xf5755c0e:  # 龙人化 # Pl2000
-                return Actor(size_t_from(size_t_from(self.address + 0xD028) + 0x70))
+                return Actor(size_t_from(size_t_from(self.address + 0xD138) + 0x70))
 
     @property
     def canceled_action(self):
         return u32_from(self.address + 0xbff8)
+
+    @property
+    def weapon(self):
+        p_weapon = self.address + self.Offsets.p_data_off + self.Offsets.p_data_weapon_off
+        size_t_from(p_weapon)  # test address
+        return self.Weapon.from_address(p_weapon)
+
+    @property
+    def sigils(self):
+        p_data = size_t_from(self.address + self.Offsets.p_data_off + self.Offsets.p_data_sigil_off)
+        size_t_from(p_data)  # test address
+        return (self.Sigil * 12).from_address(p_data)
+
+    @property
+    def is_online(self):
+        # TODO: should have a proper way to point to
+        p_data = size_t_from(self.address + self.Offsets.p_data_off + self.Offsets.p_data_sigil_off)
+        return u32_from(p_data + 0x1c8)
+
+    @property
+    def c_name(self):
+        # TODO: should have a proper way to point to
+        p_data = size_t_from(self.address + self.Offsets.p_data_off + self.Offsets.p_data_sigil_off)
+        return string_from(p_data + 0x1e8, 0x10).decode('utf-8', 'ignore')
+
+    @property
+    def d_name(self):
+        # TODO: should have a proper way to point to
+        p_data = size_t_from(self.address + self.Offsets.p_data_off + self.Offsets.p_data_sigil_off)
+        return string_from(p_data + 0x208, 0x10).decode('utf-8', 'ignore')
+
+    @property
+    def party_index(self):
+        # TODO: should have a proper way to point to
+        p_data = size_t_from(self.address + self.Offsets.p_data_off + self.Offsets.p_data_sigil_off)
+        return u32_from(p_data + 0x230)
+
+    def member_info(self):
+        w = self.weapon
+        return {
+            'weapon': {
+                'weapon_id': w.weapon,
+                'skill1': w.skill1,
+                'skill1_lv': w.skill1_lv,
+                'skill2': w.skill2,
+                'skill2_lv': w.skill2_lv,
+                'skill3': w.skill3,
+                'skill3_lv': w.skill3_lv,
+                'bless_item': w.bless_item,
+            },
+            'sigils': [
+                {
+                    'first_trait_id': s.first_trait_id,
+                    'first_trait_level': s.first_trait_level,
+                    'second_trait_id': s.second_trait_id,
+                    'second_trait_level': s.second_trait_level,
+                    'sigil_id': s.sigil_id,
+                    'sigil_level': s.sigil_level,
+                } for s in self.sigils
+            ],
+            'is_online': self.is_online,
+            'c_name': self.c_name,
+            'd_name': self.d_name,
+        }
 
 
 class ProcessDamageSource:
@@ -1877,15 +1982,20 @@ class Act:
 
         self.p_qword_1467572B0, = scanner.find_val("48 ? ? * * * * 44 89 48")
 
+        Actor.Offsets.p_data_off, = scanner.find_val("48 ? ? <? ? ? ?> 89 86 ? ? ? ? 44 89 96")
+        Actor.Offsets.p_data_sigil_off, = scanner.find_val("49 89 84 24 <? ? ? ?> 48 ? ? 74 ? 49 ? ? ? ? ? ? ? 48 89 43 ? ")
+        Actor.Offsets.p_data_weapon_off, = scanner.find_val("48 ? ? <?> 48 ? ? ? 48 ? ? e8 ? ? ? ? 31 ? ")
+
         self.i_ui_comp_name = ctypes.CFUNCTYPE(ctypes.c_char_p, ctypes.c_size_t)
         self.team_map = None
+        self.member_info = None
 
     def actor_data(self, actor: Actor):
         return actor.type_name, actor.idx, actor.type_id, self.team_map.get(actor.address, -1) if self.team_map else -1
 
     def build_team_map(self):
         if self.team_map is not None: return
-        res = {}
+        self.team_map = {}
         qword_1467572B0 = size_t_from(self.p_qword_1467572B0)
         p_party_base = size_t_from(qword_1467572B0 + 0x20)
         p_party_tbl = size_t_from(p_party_base + 0x10 * (size_t_from(qword_1467572B0 + 0x38) & 0x6C4F1B4D) + 8)
@@ -1897,9 +2007,19 @@ class Act:
                 if (self.i_ui_comp_name(v_func(a1, 0x8))(a1) == b'ui::component::ControllerPlParameter01' and
                         (p_actor := size_t_from(a1 + 0x5f8))):
                     p_actor_data = size_t_from(p_actor + 0x70)
-                    res[p_actor_data] = i
-                    print(f'[{i}] {p_actor=:#x}')
-        self.team_map = res
+                    self.team_map[p_actor_data] = i
+                    print(f'[{i}] {p_actor_data=:#x}')
+
+        self.member_info = [None, None, None, None, None, ]
+        for p_member, i in self.team_map.items():
+            try:
+                actor = Actor(p_member)
+                self.member_info[i] = actor.member_info() | {
+                    'common_info': self.actor_data(actor)
+                }
+            except:
+                logging.error(f'build_team_map {i}', exc_info=True)
+        self.on_load_party(self.member_info)
 
     def _on_process_damage_evt(self, hook, p_target_evt, p_source_evt, a3, a4):
         source_evt = ProcessDamageSource(p_source_evt)
@@ -1913,16 +2033,20 @@ class Act:
         res = hook.original(p_target_evt, p_source_evt, a3, a4)  # return 0 if it is non processed damage event
         if not (res and target and source): return res  # or if get target or source failed
         try:
-            source = source.parent or source
             flags_ = source_evt.flags
-            if (1 << 7 | 1 << 50) & flags_:
-                action_id = -1  # link attack
-            elif (1 << 13 | 1 << 14) & flags_:
-                action_id = -2  # limit break
+            if source.type_id == 0x2af678e8:  # 菲莉宝宝 # Pl0700Ghost
+                source = source.parent
+                action_id = -0x10  # summon attack
             else:
-                action_id = source_evt.action_id
-                if action_id == 0xFFFFFFFF:
-                    action_id = source.canceled_action
+                source = source.parent or source
+                if (1 << 7 | 1 << 50) & flags_:
+                    action_id = -1  # link attack
+                elif (1 << 13 | 1 << 14) & flags_:
+                    action_id = -2  # limit break
+                else:
+                    action_id = source_evt.action_id
+                    if action_id == 0xFFFFFFFF:
+                        action_id = source.canceled_action
             self._on_damage(source, target, source_evt.damage, flags_, action_id, source_evt.dmg_cap)
         except:
             logging.error('on_process_damage_evt', exc_info=True)
@@ -1944,6 +2068,7 @@ class Act:
         res = hook.original(*a)
         try:
             self.team_map = None
+            self.member_info = None
             self.on_enter_area()
         except:
             logging.error('on_enter_area', exc_info=True)
@@ -1953,6 +2078,9 @@ class Act:
         return self.on_damage(self.actor_data(source), self.actor_data(target), damage, flags, action_id, dmg_cap)
 
     def on_damage(self, source, target, damage, flags, action_id):
+        pass
+
+    def on_load_party(self, datas):
         pass
 
     def on_enter_area(self):
@@ -2005,6 +2133,10 @@ def injected_main():
         def on_enter_area(self):
             with self.lock:
                 print('on_enter_area')
+
+        def on_load_party(self, datas):
+            with self.lock:
+                print('on_load_party', datas)
 
     TestAct.reload()
     print('Act installed')

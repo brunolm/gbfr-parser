@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Chart } from "chart.js";
 import { _ } from "svelte-i18n";
 import { get } from "svelte/store";
@@ -58,7 +59,8 @@ export const createSession = (time: number) => {
     start_at: time,
     start_damage_at: 0,
     last_damage_at: 0,
-    total_dmg: 0
+    total_dmg: 0,
+    party: (window as any)._party || []
   };
   sessions.update(v => {
     v.push(session);
@@ -88,6 +90,7 @@ export const getActor = (data: ActorData) => {
   if (!actor) {
     actor = {
       player_id: data[1],
+      character_key: data[0]?.toUpperCase(),
       character_id: characterId,
       party_idx: data[3],
       dmg: 0,
@@ -107,6 +110,7 @@ export const getTarget = (actor: ActorRecord, data: ActorData) => {
   if (!target) {
     target = {
       player_id: data[1],
+      character_key: data[0]?.toUpperCase(),
       character_id: toHexString(data[2]),
       party_idx: data[3],
       dmg: 0,

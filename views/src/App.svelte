@@ -74,8 +74,8 @@
 
         const action = getAction(actor, data.flags & (1 << 15) ? -3 : data.action_id);
         action.dmg += data.damage;
-        action.capWar = data.dmgCap + data.dmgCap * 0.2;
-        action.cap = data.dmgCap;
+        action.capWar = Math.max(0, data.dmgCap + data.dmgCap * 0.2);
+        action.cap = Math.max(0, data.dmgCap);
         ++action.hit;
 
         if (action.min === -1 || action.min > data.damage) action.min = data.damage;
@@ -90,17 +90,14 @@
           source: data.source,
           target: data.target
         });
+
+        if (!session.party) session.party = [];
       });
 
       sessions.set($sessions);
       if (updateActiveSession) {
         updateActiveSession = false;
         $activeSession = session;
-
-        if (swiper) {
-          window.requestAnimationFrame(() => swiper.update());
-          window.requestAnimationFrame(() => swiper.slideTo($sessions.indexOf($activeSession)));
-        }
       }
     });
   };
@@ -350,6 +347,10 @@
             break;
           case "damage":
             onDamage(msg.data, msg.time_ms);
+            break;
+          case "load_party":
+            (window as any)._party = (msg.data as any) ?? (window as any)._party ?? [];
+
             break;
         }
       });

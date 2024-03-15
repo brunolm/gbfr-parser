@@ -705,6 +705,13 @@ class BroadcastHandler(WebSocket):
     def connected(self):
         self.clients.append(self)
 
+        if ActWs.instance.member_info: # init data
+            self.send_message(json.dumps({
+                'time_ms': int(time.time() * 1000),
+                'type': 'load_party',
+                'data': ActWs.instance.member_info
+            }))
+
     def handle_close(self):
         self.clients.remove(self)
 
@@ -718,10 +725,13 @@ from injector import Act, Process, run_admin, enable_privilege
 
 
 class ActWs(Act):
+    instance: 'ActWs' = None
+
     def __init__(self):
         super().__init__()
         self.ws_server = WebSocketServer('', 24399, BroadcastHandler)
         self.ws_thread = threading.Thread(target=self.ws_server.serve_forever)
+        ActWs.instance = self
 
     def on_damage(self, source, target, damage, flags, action_id, dmg_cap=0):
         BroadcastHandler.broadcast({
@@ -735,6 +745,13 @@ class ActWs(Act):
                 'flags': flags,
                 'dmgCap': dmg_cap
             }
+        })
+
+    def on_load_party(self, datas):
+        BroadcastHandler.broadcast({
+            'time_ms': int(time.time() * 1000),
+            'type': 'load_party',
+            'data': datas
         })
 
     def on_enter_area(self):

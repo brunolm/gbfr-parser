@@ -2,7 +2,7 @@ import { Mutex } from "../lib/Utils";
 
 declare global {
   interface Message {
-    type: "enter_area" | "damage";
+    type: "enter_area" | "damage" | "load_party";
     time_ms: number;
     data: EventData;
   }
@@ -44,6 +44,7 @@ declare global {
     cheating?: boolean;
     player_id: number;
     character_id: string;
+    character_key: string;
     party_idx: number;
 
     dmg: number;
@@ -73,6 +74,8 @@ declare global {
     events?: EventRecord[];
     actors?: ActorRecord[];
     last_chart_update?: number;
+
+    party: PartyMember[];
   }
 
   interface DataSet {
@@ -86,4 +89,32 @@ declare global {
   interface ChartData {
     datasets: DataSet[];
   }
+}
+
+type Weapon = {
+  weapon_id: number;
+  skill1: number;
+  skill1_lv: number;
+  skill2: number;
+  skill2_lv: number;
+  skill3: number;
+  skill3_lv: number;
+  bless_item: number;
+};
+
+type Sigil = {
+  first_trait_id: number;
+  first_trait_level: number;
+  second_trait_id: number;
+  second_trait_level: number;
+  sigil_id: number;
+  sigil_level: number;
+};
+
+interface PartyMember {
+  c_name: string;
+  d_name: string;
+  is_online: 0 | 1;
+  sigils: Sigil[];
+  weapons: Weapon;
 }

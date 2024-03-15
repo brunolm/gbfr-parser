@@ -9,6 +9,7 @@
   import SortDescending from "svelte-material-icons/SortDescending.svelte";
   import { get } from "svelte/store";
   import dmgcap from "./dmgcap.json";
+  import { en } from "./en";
 
   const headers: { key?: keyof ActorRecord; text: string }[] = [
     { key: "party_idx", text: "#" },
@@ -29,17 +30,26 @@
 
   export let session: Session;
 
+  const win = window as any;
+
   let sortBy: keyof ActorRecord = localStorage.sortBy ?? "dmg";
   let descending = localStorage.sortByDescending === "false" ? false : true;
 
   let chart: Chart | undefined;
   let canvas: HTMLCanvasElement;
 
-  let showCanvas = true;
+  let showCanvas = localStorage.rememberShowCanvas ? localStorage.rememberShowCanvas === "true" : false;
   let destroyed = false;
   let partyIdx = -1;
 
   let cheatingInfo = {};
+
+  let showNames = localStorage.rememberShowName ? localStorage.rememberShowName === "true" : false;
+
+  function toggleShowNames() {
+    showNames = !showNames;
+    localStorage.rememberShowName = showNames;
+  }
 
   $: {
     session.actors = session.actors?.sort((a, b) => {
@@ -196,6 +206,16 @@
 
     return Math.floor(getPrimaryTargetDamage(actor) / totalDurationInSeconds);
   };
+
+  const getCharacterName = (actor: ActorRecord) => {
+    const name = en.game.actors[actor.character_key];
+
+    if (!name) {
+      return $_(`actors.allies.${actor.character_id}`);
+    }
+
+    return name;
+  };
 </script>
 
 {#if session.actors && session.total_dmg > 0}
@@ -240,6 +260,11 @@
             {#if sortBy === header.key}
               <svelte:component this={descending ? SortDescending : SortAscending} size="2.1rem" />
             {/if}
+
+            {#if header.text === "Name"}
+              <input type="checkbox" bind:checked={showNames} title="Show names" on:click={toggleShowNames} />
+            {/if}
+
             {header.text}
           </th>
         {/each}
@@ -250,8 +275,11 @@
         {#if actor.party_idx >= 0 && actor.dmg > 0}
           <tr class="dmg-row">
             <td>{actor.party_idx + 1}</td>
-            <td style={`color: ${colors[actor.party_idx]}`}
-              >{$_(`actors.allies.${actor.character_id}`)}
+            <td style={`color: ${colors[actor.party_idx]}`}>
+              {#if showNames && session.party?.[actor.party_idx]?.d_name}
+                {session.party?.[actor.party_idx]?.d_name} -{" "}
+              {/if}
+              {getCharacterName(actor)}
 
               {#if actor.cheating}
                 <span title={cheatingInfo[actor.party_idx]}>(Cheating?)</span>
@@ -315,6 +343,7 @@
     type="button"
     on:click={() => {
       showCanvas = !showCanvas;
+      localStorage.rememberShowCanvas = showCanvas;
       if (!showCanvas) {
         chart = undefined;
       }

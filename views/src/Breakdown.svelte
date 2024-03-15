@@ -38,8 +38,8 @@
 
   let win = window as any;
 
-  let showSigils = true;
-  let showDamage = true;
+  let showSigils = localStorage.rememberShowSigils ? localStorage.rememberShowSigils === "true" : true;
+  let showDamage = localStorage.rememberShowDamage ? localStorage.rememberShowDamage === "true" : true;
 
   let targetSortBy: keyof ActorRecord = "dmg";
   let targetDescending = true;
@@ -96,11 +96,18 @@
 <div class="flex" style="justify-content: flex-end">
   <button
     style={`padding: 0.25em 1em; border: 1px solid green;${showSigils ? "background-color: green" : ""}`}
-    on:click={() => (showSigils = !showSigils)}>Sigils</button
+    on:click={() => {
+      showSigils = !showSigils;
+      localStorage.rememberShowSigils = showSigils;
+    }}>Sigils</button
   >
   <button
     style={`padding: 0.25em 1em; border: 1px solid green;${showDamage ? "background-color: green" : ""}`}
-    on:click={() => (showDamage = !showDamage)}>Damage</button
+    on:click={() => {
+      showDamage = !showDamage;
+
+      localStorage.rememberShowDamage = showDamage;
+    }}>Damage</button
   >
 </div>
 

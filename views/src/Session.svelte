@@ -307,7 +307,7 @@
           {#if partyIdx === actor.party_idx || partyIdx === -100}
             <tr>
               <td colspan="100">
-                <Breakdown {actor} />
+                <Breakdown {actor} party={session.party} />
               </td>
             </tr>
           {/if}

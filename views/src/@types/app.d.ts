@@ -116,5 +116,5 @@ interface PartyMember {
   d_name: string;
   is_online: 0 | 1;
   sigils: Sigil[];
-  weapons: Weapon;
+  weapon: Weapon;
 }

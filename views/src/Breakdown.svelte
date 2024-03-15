@@ -108,7 +108,7 @@
       {#each actor.actions || [] as action}
         <tr>
           <td>
-            <span title={action.idx}>
+            <span title={`${action.idx}`}>
               {getActionName(actor.character_id, action.idx)}
             </span>
           </td>

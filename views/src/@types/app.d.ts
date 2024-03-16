@@ -16,6 +16,7 @@ declare global {
     dmgCap: number;
     flags: number;
     attackRate: number;
+    party: PartyMember[];
   }
 
   // [0]source_type, [1]player_id, [2]character_id, [3]party_idx

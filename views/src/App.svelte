@@ -58,6 +58,7 @@
 
       await session.mutex?.wrap(() => {
         session.total_dmg += data.damage;
+        session.party = data.party;
 
         const actor = getActor(data.source);
         const target = getTarget(actor, data.target);
@@ -90,8 +91,6 @@
           source: data.source,
           target: data.target
         });
-
-        if (!session.party) session.party = [];
       });
 
       sessions.set($sessions);
@@ -349,7 +348,9 @@
             onDamage(msg.data, msg.time_ms);
             break;
           case "load_party":
-            (window as any)._party = (msg.data as any) ?? (window as any)._party ?? [];
+            const party = (msg.data as any) ?? (window as any)._party ?? [];
+            (window as any)._party = party;
+            $activeSession.party = party;
 
             break;
         }
@@ -402,59 +403,67 @@
     return maxDmgCharacterId;
   };
 
+  let showVerticalTabs = localStorage.rememberShowVerticalTabs
+    ? localStorage.rememberShowVerticalTabs === "true"
+    : true;
+
   const expandCollapse = () => {
-    let element = document.querySelector<HTMLDivElement>(".vertical-tabs");
-    const currentDisplay = window.getComputedStyle(element).display;
-    if (currentDisplay === "flex") {
-      document.querySelector<HTMLDivElement>(".vertical-tabs").style.display = "none";
-      document.querySelector<HTMLDivElement>(".expand-collapse").innerHTML = "⬅️";
-    } else {
-      document.querySelector<HTMLDivElement>(".vertical-tabs").style.display = "flex";
-      document.querySelector<HTMLDivElement>(".expand-collapse").innerHTML = "➡️";
-    }
+    showVerticalTabs = !showVerticalTabs;
+    localStorage.rememberShowVerticalTabs = showVerticalTabs;
   };
 </script>
 
 {#if connected}
   {#if $sessions.some(session => session.total_dmg > 0)}
     <div class="flex container">
-      <button class="expand-collapse" on:click={expandCollapse}>➡️</button>
-      <div class="vertical-tabs">
-        {#each [...$sessions].reverse() as session, idx}
-          {#if session.total_dmg > 0}
-            <button
-              class={`item` + ($activeSession === session ? " active" : "")}
-              type="button"
-              on:click|self={() => {
-                win.session = session;
-                $activeSession = session;
-              }}
-            >
-              {getTargetName(getTargetMostDamageTaken(session))}
-              <span
-                style="font-size: 12px"
+      <button class="expand-collapse" on:click={expandCollapse}>
+        {#if showVerticalTabs}
+          ➡️
+        {:else}
+          ⬅️
+        {/if}
+      </button>
+
+      {#if showVerticalTabs}
+        <div class="vertical-tabs">
+          {#each [...$sessions].reverse() as session, idx}
+            {#if session.total_dmg > 0}
+              <!-- svelte-ignore a11y-click-events-have-key-events -->
+              <!-- svelte-ignore a11y-no-static-element-interactions -->
+              <button
+                class={`item` + ($activeSession === session ? " active" : "")}
+                type="button"
                 on:click|self={() => {
                   win.session = session;
                   $activeSession = session;
                 }}
               >
-                {formatTime(session.start_damage_at, session.last_damage_at)}
-              </span>
-              <!-- svelte-ignore a11y-no-static-element-interactions -->
-              <!-- svelte-ignore a11y-click-events-have-key-events -->
-              <span
-                class="remove-session"
-                on:click={() => {
-                  removeSession(session);
-                }}
-              >
-                <Close size="1.6rem" />
-              </span>
-            </button>
-          {/if}
-        {/each}
-      </div>
-
+                {getTargetName(getTargetMostDamageTaken(session))}
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <span
+                  style="font-size: 12px"
+                  on:click|self={() => {
+                    win.session = session;
+                    $activeSession = session;
+                  }}
+                >
+                  {formatTime(session.start_damage_at, session.last_damage_at)}
+                </span>
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <span
+                  class="remove-session"
+                  on:click={() => {
+                    removeSession(session);
+                  }}
+                >
+                  <Close size="1.6rem" />
+                </span>
+              </button>
+            {/if}
+          {/each}
+        </div>
+      {/if}
       <div class="main-container">
         <div id="main" bind:this={mainDiv}>
           <main>

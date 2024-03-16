@@ -60,7 +60,7 @@ export const createSession = (time: number) => {
     start_damage_at: 0,
     last_damage_at: 0,
     total_dmg: 0,
-    party: (window as any)._party || []
+    party: []
   };
   sessions.update(v => {
     v.push(session);

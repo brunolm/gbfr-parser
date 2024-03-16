@@ -731,6 +731,7 @@ class ActWs(Act):
         super().__init__()
         self.ws_server = WebSocketServer('', 24399, BroadcastHandler)
         self.ws_thread = threading.Thread(target=self.ws_server.serve_forever)
+        self.last_loaded_party = None
         ActWs.instance = self
 
     def on_damage(self, source, target, damage, flags, action_id, dmg_cap=0):
@@ -743,11 +744,13 @@ class ActWs(Act):
                 'action_id': action_id,
                 'damage': damage,
                 'flags': flags,
-                'dmgCap': dmg_cap
+                'dmgCap': dmg_cap,
+                'party': self.last_loaded_party
             }
         })
 
     def on_load_party(self, datas):
+        self.last_loaded_party = datas
         BroadcastHandler.broadcast({
             'time_ms': int(time.time() * 1000),
             'type': 'load_party',

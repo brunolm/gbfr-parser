@@ -11,14 +11,14 @@
   import dmgcap from "./dmgcap.json";
   import { en } from "./en";
 
-  const headers: { key?: keyof ActorRecord; text: string }[] = [
+  const headers: { key?: keyof ActorRecord; text: string; title?: string }[] = [
     { key: "party_idx", text: "#" },
     { text: "Name" },
     { key: "dmg", text: "Damage" },
     { key: "dps", text: "DPS" },
-    { key: "pdmg", text: "PrimaryDamage" },
-    { key: "pdps", text: "PDPS" },
-    { key: "percentage", text: "%" }
+    { key: "pdmg", text: "PrimaryDamage", title: "Damage dealt to the primary target only (boss)" },
+    { key: "pdps", text: "PDPS", title: "DPS dealt to the primary target only (boss)" },
+    { key: "percentage", text: "%", title: "Damage contribution to the entire fight" }
   ];
 </script>
 
@@ -256,6 +256,7 @@
                   localStorage.sortByDescending = descending;
                 }
               : undefined}
+            title={header.title ?? ""}
           >
             {#if sortBy === header.key}
               <svelte:component this={descending ? SortDescending : SortAscending} size="2.1rem" />

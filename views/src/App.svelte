@@ -350,7 +350,10 @@
           case "load_party":
             const party = (msg.data as any) ?? (window as any)._party ?? [];
             (window as any)._party = party;
-            $activeSession.party = party;
+
+            if ($activeSession) {
+              $activeSession.party = party;
+            }
 
             break;
         }

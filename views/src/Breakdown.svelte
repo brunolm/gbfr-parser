@@ -89,7 +89,7 @@
   };
 
   const translate = (containerKey, key) => {
-    return en.game[containerKey][key.toString(16).toUpperCase()] ?? "";
+    return en.game[containerKey][key.toString(16).toUpperCase()] ?? key.toString(16);
   };
 </script>
 

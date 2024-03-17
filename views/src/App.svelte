@@ -149,7 +149,7 @@
     } as any;
     const lines = s.split("\n");
     for (let i = 0; i < lines.length; i += 2) {
-      let name = lines[i];
+      let name = lines[i].replace(/^[\S\s]+[-]\s*/, "");
       const value = lines[i + 1];
 
       if (name === "Gran" || name === "Djeeta") {

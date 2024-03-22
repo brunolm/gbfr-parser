@@ -112,7 +112,7 @@ class Act:
                     action_id = source_evt.action_id
                     if action_id == 0xFFFFFFFF:
                         action_id = source.canceled_action
-            self._on_damage(source, target, source_evt.damage, flags_, action_id)
+            self._on_damage(source, target, source_evt.damage, flags_, action_id, source_evt)
         except:
             logging.error('on_process_damage_evt', exc_info=True)
         return res
@@ -139,8 +139,8 @@ class Act:
             logging.error('on_enter_area', exc_info=True)
         return res
 
-    def _on_damage(self, source, target, damage, flags, action_id):
-        return self.on_damage(self.actor_data(source), self.actor_data(target), damage, flags, action_id)
+    def _on_damage(self, source, target, damage, flags, action_id, source_evt=None):
+        return self.on_damage(self.actor_data(source), self.actor_data(target), damage, flags, action_id, source_evt)
 
     def on_damage(self, source, target, damage, flags, action_id):
         pass

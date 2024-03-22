@@ -49,7 +49,7 @@ class ActWs(Act):
         self.last_loaded_party = None
         ActWs.instance = self
 
-    def on_damage(self, source, target, damage, flags, action_id, dmg_cap=0):
+    def on_damage(self, source, target, damage, flags, action_id, source_evt):
         BroadcastHandler.broadcast({
             'time_ms': int(time.time() * 1000),
             'type': 'damage',
@@ -59,7 +59,7 @@ class ActWs(Act):
                 'action_id': action_id,
                 'damage': damage,
                 'flags': flags,
-                'dmgCap': dmg_cap,
+                'dmgCap': source_evt.dmg_cap,
                 'party': self.last_loaded_party
             }
         })

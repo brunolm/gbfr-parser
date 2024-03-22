@@ -29,6 +29,7 @@ declare global {
     target: ActorData;
     cap: number;
     capWar: number;
+    attackRate?: number;
   }
 
   interface ActionRecord {
@@ -39,6 +40,7 @@ declare global {
     max: number;
     cap: number;
     capWar: number;
+    attackRate?: number;
   }
 
   interface ActorRecord {

@@ -89,7 +89,8 @@
   };
 
   const translate = (containerKey, key) => {
-    return en.game[containerKey][key.toString(16).toUpperCase()] ?? key.toString(16);
+    const hashKey = key.toString(16).toUpperCase();
+    return en.game[containerKey][hashKey] ?? (hashKey === "887AE0B0" ? "" : hashKey);
   };
 </script>
 

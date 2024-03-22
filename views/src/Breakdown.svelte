@@ -123,7 +123,7 @@
     </span>
 
     {#if Array.isArray(party[actor.party_idx]?.over_mastery)}
-      <div class="text-left bold mt">Over Mastery</div>
+      <div class="breakdown-h2">Over Mastery</div>
 
       <div class="grid-container border-0">
         {#each party[actor.party_idx]?.over_mastery as overMastery}
@@ -135,7 +135,7 @@
     {/if}
   {/if}
 
-  <div class="text-left bold mt">Sigils</div>
+  <div class="breakdown-h2">Sigils</div>
   <table>
     <colgroup>
       <col span="1" />
@@ -202,7 +202,7 @@
 </div>
 
 <div id="breakdown-tab-damage" style={showDamage ? "display:block" : "display: none"}>
-  <div class="text-left bold mt">Damage</div>
+  <div class="breakdown-h2 border-0">Damage</div>
 
   <table>
     <colgroup>

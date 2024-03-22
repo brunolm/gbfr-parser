@@ -18,7 +18,7 @@ jobs:
           yarn install
           yarn build
 
-          cp -t build ../act_ws.py ../EasyHook64.dll ../injector.py ../uac_start.cmd ../steam_win_start.cmd
+          cp -R -t build ../act_ws.py ../gbfr_act/utils/hook/EasyHook64.dll ../uac_start.cmd ../steam_win_start.cmd ../gbfr_act
           mv build gbfr-parser.${{ inputs.tag }}
           zip -r gbfr-parser.${{ inputs.tag }}.zip.rename gbfr-parser.${{ inputs.tag }}
           cp gbfr-parser.${{ inputs.tag }}.zip.rename gbfr-parser.${{ inputs.tag }}.zip

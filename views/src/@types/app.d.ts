@@ -114,10 +114,16 @@ type Sigil = {
   sigil_level: number;
 };
 
+type OverMastery = {
+  type_id: number;
+  level: number;
+};
+
 interface PartyMember {
   c_name: string;
   d_name: string;
   is_online: 0 | 1;
   sigils: Sigil[];
   weapon: Weapon;
+  over_mastery: OverMastery[];
 }

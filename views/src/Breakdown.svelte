@@ -89,6 +89,10 @@
   };
 
   const translate = (containerKey, key) => {
+    if (!key) {
+      return "-";
+    }
+
     const hashKey = key.toString(16).toUpperCase();
     return en.game[containerKey][hashKey] ?? (hashKey === "887AE0B0" ? "" : hashKey);
   };
@@ -115,10 +119,23 @@
 <div id="breakdown-tab-sigils" style={showSigils ? "display:block" : "display: none"}>
   {#if party?.length > actor.party_idx}
     <span>
-      {en.game.weapons[party[actor.party_idx]?.weapon?.weapon_id.toString(16).toUpperCase()]}
+      {en.game.weapons[party[actor.party_idx]?.weapon?.weapon_id.toString(16).toUpperCase()] ?? "-"}
     </span>
+
+    {#if Array.isArray(party[actor.party_idx]?.over_mastery)}
+      <div class="text-left bold mt">Over Mastery</div>
+
+      <div class="grid-container border-0">
+        {#each party[actor.party_idx]?.over_mastery as overMastery}
+          <div>
+            {en.game.over_mastery[overMastery.type_id.toString(16).toUpperCase()]} lv.{overMastery.level ?? "-"}
+          </div>
+        {/each}
+      </div>
+    {/if}
   {/if}
 
+  <div class="text-left bold mt">Sigils</div>
   <table>
     <colgroup>
       <col span="1" />
@@ -154,35 +171,39 @@
           <td></td>
           <td></td>
           <td>{translate("skills", party[actor.party_idx]?.weapon.skill1)}</td>
-          <td>{party[actor.party_idx]?.weapon.skill1_lv}</td>
+          <td>{party[actor.party_idx]?.weapon.skill1_lv ?? "-"}</td>
         </tr>
         <tr>
           <td></td>
           <td></td>
           <td>{translate("skills", party[actor.party_idx]?.weapon.skill2)}</td>
-          <td>{party[actor.party_idx]?.weapon.skill2_lv}</td>
+          <td>{party[actor.party_idx]?.weapon.skill2_lv ?? "-"}</td>
         </tr>
         <tr>
           <td></td>
           <td></td>
           <td>{translate("skills", party[actor.party_idx]?.weapon.skill3)}</td>
-          <td>{party[actor.party_idx]?.weapon.skill3_lv}</td>
+          <td>{party[actor.party_idx]?.weapon.skill3_lv ?? "-"}</td>
         </tr>
 
-        {#each party[actor.party_idx].sigils as sigil}
-          <tr>
-            <td>{translate("skills", sigil.first_trait_id)}</td>
-            <td>{sigil.first_trait_level}</td>
-            <td>{translate("skills", sigil.second_trait_id)}</td>
-            <td>{sigil.second_trait_level}</td>
-          </tr>
-        {/each}
+        {#if Array.isArray(party[actor.party_idx]?.sigils)}
+          {#each party[actor.party_idx]?.sigils as sigil}
+            <tr>
+              <td>{translate("skills", sigil.first_trait_id)}</td>
+              <td>{sigil.first_trait_level}</td>
+              <td>{translate("skills", sigil.second_trait_id)}</td>
+              <td>{sigil.second_trait_level}</td>
+            </tr>
+          {/each}
+        {/if}
       {/if}
     </tbody>
   </table>
 </div>
 
 <div id="breakdown-tab-damage" style={showDamage ? "display:block" : "display: none"}>
+  <div class="text-left bold mt">Damage</div>
+
   <table>
     <colgroup>
       <col span="1" />

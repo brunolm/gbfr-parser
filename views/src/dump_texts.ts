@@ -6022,6 +6022,1036 @@ export const dump_texts: any = {
         key: "ITEM_28_9999",
         text: "Sequestration Wrightstone"
       }
+    },
+    over_mastery: {
+      FA230938: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      BF44C20B: {
+        key: null,
+        text: "Health Up"
+      },
+      "2906F3ED": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      D5169339: {
+        key: null,
+        text: "Stun Power Up"
+      },
+      "8E4AF42A": {
+        key: "LBP_EFF_AB_DMG01",
+        text: "Skill Damage Up"
+      },
+      CD6542F5: {
+        key: null,
+        text: "Skybound Art Damage Up"
+      },
+      "2989CAE9": {
+        key: null,
+        text: "Chain Burst Damage Up"
+      },
+      ABA0FEDD: {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      CAC0BEB6: {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      FB4819D9: {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      C4925BD7: {
+        key: "MED_EFF_ATK01",
+        text: "Attack Power Up"
+      },
+      "52A207B5": {
+        key: "MED_EFF_HP01",
+        text: "Health Up"
+      },
+      "45C65767": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "6CB38EF3": {
+        key: null,
+        text: "Stun Power Up"
+      },
+      "9A97C049": {
+        key: null,
+        text: "Skill Damage Up"
+      },
+      "4E42646B": {
+        key: null,
+        text: "Skybound Art Damage Up"
+      },
+      "68B39018": {
+        key: null,
+        text: "Chain Burst Damage Up"
+      },
+      "43B7581D": {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      "9C555433": {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      "4A4C093D": {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      "54929589": {
+        key: null,
+        text: "Healing Cap Up"
+      },
+      CB63BE55: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      DCBD8423: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "59DCE1E8": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      F203BB15: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "57BBC478": {
+        key: null,
+        text: "Health Up"
+      },
+      "5A51F0CB": {
+        key: null,
+        text: "Health Up"
+      },
+      "9C6375CF": {
+        key: null,
+        text: "Health Up"
+      },
+      F004E9F2: {
+        key: null,
+        text: "Health Up"
+      },
+      C4B86ED7: {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      CEB0DBD2: {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      A3545CA1: {
+        key: null,
+        text: "Stun Power Up"
+      },
+      "59FBB7D8": {
+        key: null,
+        text: "Stun Power Up"
+      },
+      A1DC63B3: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      C2D708C1: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "874353D7": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "807E9E58": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      C6BDC7A6: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "38F656E7": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "60835D4F": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "7CCF98C5": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      A257DAC1: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "49089D4F": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "8AF65803": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "1CC2F730": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "85F0F318": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "1268B903": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      CCEF4492: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "124DB819": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      C1360291: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      BD488071: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      E056BA80: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      FE71865D: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "829B8B5C": {
+        key: null,
+        text: "Health Up"
+      },
+      F80E3310: {
+        key: null,
+        text: "Health Up"
+      },
+      "032A5217": {
+        key: null,
+        text: "Health Up"
+      },
+      BBE7992A: {
+        key: null,
+        text: "Health Up"
+      },
+      F5514F81: {
+        key: null,
+        text: "Health Up"
+      },
+      C265B03B: {
+        key: null,
+        text: "Health Up"
+      },
+      "11023C6F": {
+        key: null,
+        text: "Health Up"
+      },
+      "61D4EFA0": {
+        key: null,
+        text: "Health Up"
+      },
+      CF24E1A2: {
+        key: null,
+        text: "Health Up"
+      },
+      "8E66B68C": {
+        key: null,
+        text: "Health Up"
+      },
+      D51958D1: {
+        key: null,
+        text: "Health Up"
+      },
+      "437C055D": {
+        key: null,
+        text: "Health Up"
+      },
+      EA5EAAFC: {
+        key: null,
+        text: "Health Up"
+      },
+      "15AFE5A1": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "6E13DF92": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "3B23FE95": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "699C6476": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      E50EA3D0: {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      D63DD12B: {
+        key: null,
+        text: "Stun Power Up"
+      },
+      "3356DD03": {
+        key: null,
+        text: "Stun Power Up"
+      },
+      F5C314A0: {
+        key: null,
+        text: "Stun Power Up"
+      },
+      F87DEEB9: {
+        key: null,
+        text: "Skill Damage Up"
+      },
+      "4BF827D5": {
+        key: null,
+        text: "Skill Damage Up"
+      },
+      "4FC7DB58": {
+        key: null,
+        text: "Skill Damage Up"
+      },
+      F581C321: {
+        key: null,
+        text: "Skybound Art Damage Up"
+      },
+      "2BA1549D": {
+        key: null,
+        text: "Skybound Art Damage Up"
+      },
+      E57F6D44: {
+        key: null,
+        text: "Skybound Art Damage Up"
+      },
+      CFA862BD: {
+        key: null,
+        text: "Chain Burst Damage Up"
+      },
+      "75D793BD": {
+        key: null,
+        text: "Chain Burst Damage Up"
+      },
+      "9EE4105A": {
+        key: null,
+        text: "Chain Burst Damage Up"
+      },
+      "3DABC271": {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      "6811123B": {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      "281DC5FF": {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      "8F505D1D": {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      FC0A10F6: {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      C40A90DF: {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      "7F69DF6B": {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      CE775676: {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      "233A60D5": {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      "62289920": {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      "688246F9": {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      "3CD2F6AF": {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      "72ECDB4F": {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      EA14FA65: {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      "424F95E2": {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      "76C83BFD": {
+        key: null,
+        text: "Healing Cap Up"
+      },
+      "524492E2": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "455D6A1C": {
+        key: null,
+        text: "Stun Power Up"
+      },
+      CC8A39EF: {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "0781C7A2": {
+        key: null,
+        text: "Health Up"
+      },
+      C52D2245: {
+        key: null,
+        text: "Health Up"
+      },
+      "7125942E": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "403BE586": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "0F25B474": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      CF6B267A: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      EEFB4ADE: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      CD5D6315: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "4E2513DF": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "91265F66": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      FA9BCF64: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "95567556": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      B83AA115: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "13C9452A": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      EA99FA76: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      CB43FF8E: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "9B6F164C": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "60926B53": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "53D358E0": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      C5D68C62: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      DE6A367A: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "24499A25": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      DA546DFE: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "4AB91EA7": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "9BFD4548": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      DF2CAB83: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "254A08D4": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "303BECC0": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "9A0988DF": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      BE8C17D4: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "2EA457F3": {
+        key: null,
+        text: "Health Up"
+      },
+      "3CA4C8D5": {
+        key: null,
+        text: "Health Up"
+      },
+      "409DF671": {
+        key: null,
+        text: "Health Up"
+      },
+      "9A29AA64": {
+        key: null,
+        text: "Health Up"
+      },
+      "6564C02B": {
+        key: null,
+        text: "Health Up"
+      },
+      "1E2B3DB5": {
+        key: null,
+        text: "Health Up"
+      },
+      "3AC53494": {
+        key: null,
+        text: "Health Up"
+      },
+      DFB00115: {
+        key: null,
+        text: "Health Up"
+      },
+      AB56BDE3: {
+        key: null,
+        text: "Health Up"
+      },
+      "0DB88F30": {
+        key: null,
+        text: "Health Up"
+      },
+      "2D6C03EB": {
+        key: null,
+        text: "Health Up"
+      },
+      "5767DD9F": {
+        key: null,
+        text: "Health Up"
+      },
+      "427B5E26": {
+        key: null,
+        text: "Health Up"
+      },
+      "72296D1C": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "27927560": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "2229B810": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "9730A344": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "29938B25": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "7B498C32": {
+        key: null,
+        text: "Stun Power Up"
+      },
+      "6837E60C": {
+        key: null,
+        text: "Stun Power Up"
+      },
+      "9BF7878A": {
+        key: null,
+        text: "Stun Power Up"
+      },
+      "426B370B": {
+        key: null,
+        text: "Skill Damage Up"
+      },
+      "51BCF5AE": {
+        key: null,
+        text: "Skill Damage Up"
+      },
+      "0D6B32A3": {
+        key: null,
+        text: "Skill Damage Up"
+      },
+      A73CD44C: {
+        key: null,
+        text: "Skybound Art Damage Up"
+      },
+      "0CE31E6B": {
+        key: null,
+        text: "Skybound Art Damage Up"
+      },
+      "70BA21AD": {
+        key: null,
+        text: "Skybound Art Damage Up"
+      },
+      AA7247E1: {
+        key: null,
+        text: "Chain Burst Damage Up"
+      },
+      FC942F30: {
+        key: null,
+        text: "Chain Burst Damage Up"
+      },
+      AD5ECDD3: {
+        key: null,
+        text: "Chain Burst Damage Up"
+      },
+      B5B62B63: {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      "8105C89C": {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      "0716AA8D": {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      "19E012E9": {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      E16A1D0D: {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      C7E54ACC: {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      E742CCE0: {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      "0B0E4311": {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      "6F6B59BA": {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      D4C00BAF: {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      "18BE125B": {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      F3EE9A98: {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      "047B7A70": {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      "149593B8": {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      "776ADCA4": {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      EC3B22FF: {
+        key: null,
+        text: "Healing Cap Up"
+      },
+      C96005F7: {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      C11FDFBD: {
+        key: null,
+        text: "Stun Power Up"
+      },
+      "287F67C9": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "4CE64874": {
+        key: null,
+        text: "Health Up"
+      },
+      AAC23948: {
+        key: null,
+        text: "Health Up"
+      },
+      "66092BC7": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      CB6BB434: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "0B134A7F": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "5382923D": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      A2BCF523: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      FB276AFD: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "93572974": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      DF2EEF09: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      A85B4AF5: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "6FB47781": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      E7710898: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      DDC29837: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "937EFB96": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "8FE7FB0A": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "67BDE89B": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      F2111B99: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "0CF5D0F3": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "6E4F2F5E": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      A3460028: {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "834892B4": {
+        key: null,
+        text: "Attack Power Up"
+      },
+      "3526FECB": {
+        key: null,
+        text: "Health Up"
+      },
+      "5A57DC07": {
+        key: null,
+        text: "Health Up"
+      },
+      "3D6600D9": {
+        key: null,
+        text: "Health Up"
+      },
+      "155C25C3": {
+        key: null,
+        text: "Health Up"
+      },
+      "7E870EBE": {
+        key: null,
+        text: "Health Up"
+      },
+      EE6100CA: {
+        key: null,
+        text: "Health Up"
+      },
+      "871D12CC": {
+        key: null,
+        text: "Health Up"
+      },
+      "7CBBB4E0": {
+        key: null,
+        text: "Health Up"
+      },
+      "44F04A7A": {
+        key: null,
+        text: "Health Up"
+      },
+      "0FEBC993": {
+        key: null,
+        text: "Health Up"
+      },
+      "911D4F18": {
+        key: null,
+        text: "Health Up"
+      },
+      ACCBECE1: {
+        key: null,
+        text: "Health Up"
+      },
+      "394083BD": {
+        key: null,
+        text: "Health Up"
+      },
+      "45BC2345": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "1296ED4A": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "157C0614": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      C680087D: {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "5E95A4A4": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "7B05E679": {
+        key: null,
+        text: "Stun Power Up"
+      },
+      "36F068FD": {
+        key: null,
+        text: "Stun Power Up"
+      },
+      A85495BA: {
+        key: null,
+        text: "Stun Power Up"
+      },
+      "574AC06B": {
+        key: null,
+        text: "Skill Damage Up"
+      },
+      FE59F993: {
+        key: null,
+        text: "Skill Damage Up"
+      },
+      A2388DE8: {
+        key: null,
+        text: "Skill Damage Up"
+      },
+      AE39E4A1: {
+        key: null,
+        text: "Skybound Art Damage Up"
+      },
+      "020D2C07": {
+        key: null,
+        text: "Skybound Art Damage Up"
+      },
+      E14A5507: {
+        key: null,
+        text: "Skybound Art Damage Up"
+      },
+      CD5B5B8F: {
+        key: null,
+        text: "Chain Burst Damage Up"
+      },
+      F913D839: {
+        key: null,
+        text: "Chain Burst Damage Up"
+      },
+      A5A1B56B: {
+        key: null,
+        text: "Chain Burst Damage Up"
+      },
+      "563F7784": {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      F3883729: {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      "0D4295FD": {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      BD612B10: {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      "06595C52": {
+        key: null,
+        text: "Normal Attack Damage Cap Up"
+      },
+      "8E175220": {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      B63A15AF: {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      "7AFFDE77": {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      "9C6272CF": {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      "4DEE3365": {
+        key: null,
+        text: "Skill Damage Cap Up"
+      },
+      "2AB305F4": {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      DE3F845B: {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      CBC6B841: {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      "4B54500D": {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      E5D1F9E1: {
+        key: null,
+        text: "Skybound Art Damage Cap Up"
+      },
+      "43D71E8F": {
+        key: null,
+        text: "Healing Cap Up"
+      },
+      D83326CE: {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "2C1C933D": {
+        key: null,
+        text: "Stun Power Up"
+      },
+      "1D85A640": {
+        key: null,
+        text: "Critical Hit Rate Up"
+      },
+      "4C0CBD32": {
+        key: null,
+        text: "Health Up"
+      },
+      AF0D8B97: {
+        key: null,
+        text: "Health Up"
+      },
+      "2676F9D2": {
+        key: null,
+        text: "Stun Power Up"
+      },
+      A901E065: {
+        key: null,
+        text: "Stun Power Up"
+      },
+      "3DAE6494": {
+        key: null,
+        text: "Stun Power Up"
+      }
     }
   }
 };

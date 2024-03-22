@@ -813,6 +813,9 @@ export const en = {
     },
     weapons: {
       ...hash_as_key(dump_texts.en.weapons)
+    },
+    over_mastery: {
+      ...hash_as_key(dump_texts.en.over_mastery)
     }
   }
 };

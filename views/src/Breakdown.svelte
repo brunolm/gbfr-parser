@@ -93,7 +93,7 @@
       return "-";
     }
 
-    const hashKey = key.toString(16).toUpperCase();
+    const hashKey = key.toString(16).toUpperCase().padStart(8, "0");
     return en.game[containerKey][hashKey] ?? (hashKey === "887AE0B0" ? "" : hashKey);
   };
 </script>

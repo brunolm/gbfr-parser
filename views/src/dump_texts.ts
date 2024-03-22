@@ -3917,10 +3917,6 @@ export const dump_texts: any = {
       "5C862E13": {
         key: "SKILL_162_00",
         text: "Gamma"
-      },
-      "53599E": {
-        key: "MOCK",
-        text: "Steady Focus"
       }
     },
     weapons: {

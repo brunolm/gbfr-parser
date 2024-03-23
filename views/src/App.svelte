@@ -496,7 +496,9 @@
           </div>
 
           <div class="buttons-container">
-            <button id="saveAll" on:click={saveAll} class="button button-sm">Save All</button>
+            <button id="saveAll" on:click={saveAll} class="button button-sm" title={`Total fights: ${$sessions.length}`}
+              >Save All</button
+            >
             <button id="loadAll" on:click={loadFromFile} class="button button-sm">Load file</button>
             <button id="clearAll" on:click={clearAll} class="button button-sm">Clear all</button>
           </div>

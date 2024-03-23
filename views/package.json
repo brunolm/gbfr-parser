@@ -8,6 +8,7 @@
     "start": "sirv public --no-clear"
   },
   "dependencies": {
+    "@svelte-put/shortcut": "^3.1.0",
     "chart.js": "^4.4.1",
     "html2canvas": "^1.4.1",
     "idb": "^8.0.0",

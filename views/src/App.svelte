@@ -5,14 +5,17 @@
 
   import Close from "svelte-material-icons/Close.svelte";
 
+  import ChevronDown from "svelte-material-icons/ChevronDown.svelte";
+  import ChevronUp from "svelte-material-icons/ChevronUp.svelte";
+
   const debug = false;
 </script>
 
 <script lang="ts">
+  import { shortcut, type ShortcutEventDetail } from "@svelte-put/shortcut";
   import html2canvas from "html2canvas";
   import { _ } from "svelte-i18n";
   import { get } from "svelte/store";
-  import Session from "./Session.svelte";
   import { activeSession, mutex, sessions } from "./lib/Stores";
   import {
     createSession,
@@ -24,6 +27,7 @@
     removeSession,
     saveSessions
   } from "./lib/Utils";
+  import Session from "./Session.svelte";
 
   const win = window as any;
 
@@ -321,6 +325,20 @@
     }
   }
 
+  function handleKbArrowUp(detail: ShortcutEventDetail) {
+    const idx = $sessions.indexOf($activeSession);
+    if (idx < $sessions.length - 1) {
+      $activeSession = $sessions[idx + 1];
+    }
+  }
+
+  function handleKbArrowDown(detail: ShortcutEventDetail) {
+    const idx = $sessions.indexOf($activeSession);
+    if (idx > 0) {
+      $activeSession = $sessions[idx - 1];
+    }
+  }
+
   onMount(async () => {
     const savedSessions = await loadSavedSessions();
     if (savedSessions) {
@@ -428,43 +446,74 @@
       </button>
 
       {#if showVerticalTabs}
-        <div class="vertical-tabs">
-          {#each [...$sessions].reverse() as session, idx}
-            {#if session.total_dmg > 0}
-              <!-- svelte-ignore a11y-click-events-have-key-events -->
-              <!-- svelte-ignore a11y-no-static-element-interactions -->
-              <button
-                class={`item` + ($activeSession === session ? " active" : "")}
-                type="button"
-                on:click|self={() => {
-                  win.session = session;
-                  $activeSession = session;
-                }}
-              >
-                {getTargetName(getTargetMostDamageTaken(session))}
+        <div class="flex flex-col gap-2 justify-center">
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
+          <button>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div
+              on:click={() => {
+                const idx = $sessions.indexOf($activeSession);
+                if (idx < $sessions.length - 1) {
+                  $activeSession = $sessions[idx + 1];
+                }
+              }}
+            >
+              <ChevronUp size="2.2rem" />
+            </div>
+          </button>
+          <div class="vertical-tabs">
+            {#each [...$sessions].reverse() as session, idx}
+              {#if session.total_dmg > 0}
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <span
-                  style="font-size: 12px"
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                <button
+                  class={`item` + ($activeSession === session ? " active" : "")}
+                  type="button"
                   on:click|self={() => {
                     win.session = session;
                     $activeSession = session;
                   }}
                 >
-                  {formatTime(session.start_damage_at, session.last_damage_at)}
-                </span>
-                <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <span
-                  class="remove-session"
-                  on:click={() => {
-                    removeSession(session);
-                  }}
-                >
-                  <Close size="1.6rem" />
-                </span>
-              </button>
-            {/if}
-          {/each}
+                  {getTargetName(getTargetMostDamageTaken(session))}
+                  <!-- svelte-ignore a11y-click-events-have-key-events -->
+                  <span
+                    style="font-size: 12px"
+                    on:click|self={() => {
+                      win.session = session;
+                      $activeSession = session;
+                    }}
+                  >
+                    {formatTime(session.start_damage_at, session.last_damage_at)}
+                  </span>
+                  <!-- svelte-ignore a11y-no-static-element-interactions -->
+                  <!-- svelte-ignore a11y-click-events-have-key-events -->
+                  <span
+                    class="remove-session"
+                    on:click={() => {
+                      removeSession(session);
+                    }}
+                  >
+                    <Close size="1.6rem" />
+                  </span>
+                </button>
+              {/if}
+            {/each}
+          </div>
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
+          <button>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div
+              on:click={() => {
+                const idx = $sessions.indexOf($activeSession);
+                console.log(idx);
+                if (idx > 0) {
+                  $activeSession = $sessions[idx - 1];
+                }
+              }}
+            >
+              <ChevronDown size="2.2rem" />
+            </div>
+          </button>
         </div>
       {/if}
       <div class="main-container">
@@ -522,3 +571,8 @@
 {:else}
   <i>Establishing connection to WebSocket...</i>
 {/if}
+
+<svelte:window
+  use:shortcut={{ trigger: { key: "ArrowUp", modifier: [], callback: handleKbArrowUp } }}
+  use:shortcut={{ trigger: { key: "ArrowDown", modifier: [], callback: handleKbArrowDown } }}
+/>

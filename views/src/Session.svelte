@@ -231,8 +231,8 @@
   </div>
   <table>
     <colgroup>
-      <col width="50" />
-      <col width="150" />
+      <col width="30" />
+      <col width="180" />
       <col span="1" />
       <col span="1" />
       <col span="1" />

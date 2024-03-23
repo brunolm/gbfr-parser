@@ -135,7 +135,43 @@
     {/if}
   {/if}
 
-  <div class="breakdown-h2">Sigils</div>
+  <div class="breakdown-h2">
+    Sigils
+    <button
+      title="Copy sigils to calc. format"
+      on:click={() => {
+        const sigils = party[actor.party_idx]?.sigils;
+        if (Array.isArray(sigils)) {
+          const sigilString = sigils
+            .map(sigil => {
+              return `${translate("skills", sigil.first_trait_id)}\t${sigil.first_trait_level}\t\t${translate(
+                "skills",
+                sigil.second_trait_id
+              )}\t${sigil.second_trait_level}`;
+            })
+            .join("\n");
+
+          navigator.clipboard.writeText(`${sigilString}`);
+        }
+      }}
+    >
+      📋
+    </button>
+    <button
+      title="Copy weapon to calc. format"
+      on:click={() => {
+        const weapon = [
+          `${translate("skills", party[actor.party_idx]?.weapon.skill1)}\t${party[actor.party_idx]?.weapon.skill1_lv ?? "-"}`,
+          `${translate("skills", party[actor.party_idx]?.weapon.skill2)}\t${party[actor.party_idx]?.weapon.skill2_lv ?? "-"}`,
+          `${translate("skills", party[actor.party_idx]?.weapon.skill3)}\t${party[actor.party_idx]?.weapon.skill3_lv ?? "-"}`
+        ].join("\n");
+
+        navigator.clipboard.writeText(`${weapon}`);
+      }}
+    >
+      📋
+    </button>
+  </div>
   <table>
     <colgroup>
       <col span="1" />

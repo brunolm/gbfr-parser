@@ -59,7 +59,7 @@ class ActWs(Act):
                 'action_id': action_id,
                 'damage': damage,
                 'flags': flags,
-                'dmgCap': source_evt.dmg_cap,
+                'dmgCap': source_evt.dmg_cap if source_evt is not None else 0,
                 'party': self.last_loaded_party
             }
         })

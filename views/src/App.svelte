@@ -348,7 +348,6 @@
             onDamage(msg.data, msg.time_ms);
             break;
           case "load_party":
-            console.log("load party", msg.data);
             const party = (msg.data as any) ?? (window as any)._party ?? [];
             (window as any)._party = party;
 

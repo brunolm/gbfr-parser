@@ -26,7 +26,7 @@
   import Breakdown from "./Breakdown.svelte";
   import { colors } from "./lib/Constants";
   import { sessions } from "./lib/Stores";
-  import { calculateDps, formatDuration, pruneEvents } from "./lib/Utils";
+  import { calculateDps, formatDuration, getHash, pruneEvents } from "./lib/Utils";
 
   export let session: Session;
 
@@ -49,6 +49,12 @@
   function toggleShowNames() {
     showNames = !showNames;
     localStorage.rememberShowName = showNames;
+  }
+
+  function addCheatingHeaderMessage(cheatingInfo, actor) {
+    if (!cheatingInfo[actor.party_idx]) {
+      cheatingInfo[actor.party_idx] = "Possible cheating detected\n";
+    }
   }
 
   $: {
@@ -74,14 +80,105 @@
           }
 
           if (action.max > cap) {
-            if (!cheatingInfo[actor.party_idx]) {
-              cheatingInfo[actor.party_idx] = "Possible cheating detected\n";
-            }
+            addCheatingHeaderMessage(cheatingInfo, actor);
 
             actor.cheating = true;
             cheatingInfo[actor.party_idx] +=
               `${$_(`actors.allies.${actor.character_id}`)} -> ${$_(`actions.${actor.character_id}.${action.idx}`)} (${action.idx}) -> ` +
               `Dmg: ${action.max.toLocaleString()} / Cap: ${cap.toLocaleString()} / Diff: ${(action.max - cap).toLocaleString()}\n`;
+          }
+        }
+
+        // WrightStone check
+        const partyPlayer = session.party[actor.party_idx];
+        const wsSkill1 = getHash(partyPlayer.weapon.skill1);
+        const wsSkill2 = getHash(partyPlayer.weapon.skill2);
+        const wsSkill3 = getHash(partyPlayer.weapon.skill3);
+
+        const notAllowedWrightstone = [
+          "57AB5B10",
+          "82CE278D",
+          "1568E0E4",
+          "70395731",
+          "CD18A77D",
+          "333E5862",
+          "A8A3163B",
+          "EC1C6779",
+          "DBE1D775",
+          "8D2ADB6E",
+          "5C862E13",
+          "082033CB",
+          "1B0D9897",
+          "9AD8B5E6",
+          "40223C28",
+          "74AA75D6",
+          "DC225C96",
+          "4C588C27",
+          "5E422AE5",
+          "AF794A87",
+          "57AB5B10"
+        ];
+        const hasCheatedWrightStone =
+          notAllowedWrightstone.includes(wsSkill1) ||
+          notAllowedWrightstone.includes(wsSkill2) ||
+          notAllowedWrightstone.includes(wsSkill3);
+
+        if (hasCheatedWrightStone) {
+          actor.cheating = true;
+
+          addCheatingHeaderMessage(cheatingInfo, actor);
+          cheatingInfo[actor.party_idx] += `Modified wrightstone: invalid skill`;
+        }
+
+        if (partyPlayer.weapon.skill1_lv > 10) {
+          actor.cheating = true;
+
+          addCheatingHeaderMessage(cheatingInfo, actor);
+          cheatingInfo[actor.party_idx] += `Modified wrightstone: over level 10\n`;
+        }
+
+        if (partyPlayer.weapon.skill2_lv > 7) {
+          actor.cheating = true;
+
+          addCheatingHeaderMessage(cheatingInfo, actor);
+          cheatingInfo[actor.party_idx] += `Modified wrightstone: over level 7\n`;
+        }
+
+        if (partyPlayer.weapon.skill3_lv > 5) {
+          actor.cheating = true;
+
+          addCheatingHeaderMessage(cheatingInfo, actor);
+          cheatingInfo[actor.party_idx] += `Modified wrightstone: over level 5\n`;
+        }
+
+        // Sigils check
+        for (const sigil of partyPlayer.sigils) {
+          if (sigil.first_trait_level > 15 || sigil.second_trait_level > 15 || sigil.sigil_level > 15) {
+            actor.cheating = true;
+
+            addCheatingHeaderMessage(cheatingInfo, actor);
+            cheatingInfo[actor.party_idx] += `Modified sigil: over level 15\n`;
+          }
+          const sigilTrait1 = getHash(sigil.first_trait_id);
+          const sigilTrait2 = getHash(sigil.second_trait_id);
+
+          const isLucySigil = sigilTrait1 === "DBE1D775" || sigilTrait1 === "8D2ADB6E" || sigilTrait1 === "5C862E13";
+          if (isLucySigil && sigilTrait2 !== "DC584F60") {
+            actor.cheating = true;
+
+            addCheatingHeaderMessage(cheatingInfo, actor);
+            const invalidSub = en.game.skills[sigilTrait2] ?? sigilTrait2;
+            cheatingInfo[actor.party_idx] += `Modified sigil: Lucy sigil with invalid second trait: ${invalidSub}\n`;
+          }
+
+          const isWarElemental = sigilTrait1 === "4C588C27";
+          if (isWarElemental && sigilTrait2 !== "887AE0B0") {
+            actor.cheating = true;
+
+            addCheatingHeaderMessage(cheatingInfo, actor);
+            const invalidSub = en.game.skills[sigilTrait2] ?? sigilTrait2;
+            cheatingInfo[actor.party_idx] +=
+              `Modified sigil: War Elemental sigil with invalid second trait: ${invalidSub}\n`;
           }
         }
       }

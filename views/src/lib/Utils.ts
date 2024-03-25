@@ -246,3 +246,7 @@ export const isActionValid = (characterId: string, actionId: number) => {
   if (!$_(`actions.common.${actionId}`).includes("actions.")) return true;
   return !$_(`actions.${characterId}.${actionId}`).includes("actions.");
 };
+
+export const getHash = (n: number) => {
+  return n.toString(16).toUpperCase();
+};
